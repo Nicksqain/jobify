@@ -1,0 +1,10 @@
+.App {
+  font-family: "poppins", sans-serif;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 20px;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+  --wrapperPadding: 70px;
+}

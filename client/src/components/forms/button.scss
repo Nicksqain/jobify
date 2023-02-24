@@ -1,0 +1,30 @@
+form button {
+  margin-top: 20px;
+}
+
+button {
+  min-height: 20px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  position: relative !important;
+  align-items: center;
+  background-color: #5f5cee;
+  border: none;
+
+  .loading {
+    height: 10px;
+  }
+}
+
+.main-btn {
+  padding: 8px 15px;
+  color: #fff;
+  border-radius: 3px;
+
+  &:disabled,
+  &[disabled] {
+    cursor: not-allowed;
+    background-color: #5f5ceeb6;
+    color: #898989;
+  }
+}
