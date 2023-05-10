@@ -12,11 +12,11 @@ datasource db {
   extensions = [uuidOssp(map: "uuid-ossp")]
 }
 model User {
-  id String @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  id String? @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
   fullname String
   email String  @unique
   password String
-  role String
+  role String? @default("user")
   status Status @default(freelancer)
 }
 enum Status {

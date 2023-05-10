@@ -36,7 +36,8 @@ export const signup = async (req: Request, res: Response) => {
         error: "Password is required and should be 6 characters long",
       });
     }
-    const exist = await User.findOne({ email });
+    const exist = await prisma.user.findUnique({ where: { email: email } });
+
     if (exist) {
       return res.json({
         error: "Email is taken",
@@ -46,20 +47,33 @@ export const signup = async (req: Request, res: Response) => {
     const hashedPassword = await hashPassword(password);
 
     try {
-      const user = await new User({
-        name,
-        email,
-        password: hashedPassword,
-        status,
-      }).save();
+      // Mongo
+
+      // const user = await new User({
+      //   name,
+      //   email,
+      //   password: hashedPassword,
+      //   status,
+      // }).save();
+
+      // Postgres
+
+      const user = await prisma.user.create({
+        data: {
+          email,
+          fullname: name,
+          password: hashedPassword,
+          status: status,
+        },
+      });
 
       // create signed token
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ _id: user.id }, process.env.JWT_SECRET!, {
         expiresIn: "7d",
       });
 
       //   console.log(user);
-      const { password, ...rest } = user._doc;
+      const { password, ...rest } = user;
       return res.json({
         token,
         user: rest,
@@ -77,27 +91,26 @@ export const signin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     // check if our db has user with that email
-    const user = await User.findOne({ email });
-    const user = await User.findOne({ email });
+    const user = await prisma.user.findUnique({ where: { email: email } });
     if (!user) {
-      return res.json({
-        error: "No user found",
+      return res.status(400).send({
+        error: "No user founds",
       });
     }
     // check password
     const match = await comparePassword(password, user.password);
     if (!match) {
-      return res.json({
+      return res.status(400).json({
         error: "Wrong password",
       });
     }
     // create signed token
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ _id: user.id }, process.env.JWT_SECRET as string, {
       expiresIn: "7d",
     });
 
-    user.password = undefined;
-    user.secret = undefined;
+    user.password = undefined!;
+    // user.secret = undefined!;
     res.json({
       token,
       user,

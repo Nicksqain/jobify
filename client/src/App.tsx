@@ -6,52 +6,50 @@ import SocketContext from './context/socketContext'
 import Home from './pages/Home';
 // Components
 import PageNotFound from "./pages/PageNotFound";
-import NavBar from './components/NavBar/NavBar';
+
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
+import NavBar from './components/NavBar/NavBar';
+import { Toaster } from "react-hot-toast";
+import PrivateRoute from './components/PrivateRoute';
+import Orders from './pages/Orders/Orders';
+import { AuthProvider } from './context/authContext';
 const App: React.FC = () => {
-
   const socket = null
-
   return (
-    <SocketContext.Provider value={socket}>
-      {/* <AuthProvider> */}
+    <AuthProvider>
+      <SocketContext.Provider value={socket}>
+        <BrowserRouter>
+          <div className="App">
+            <Toaster />
+            {/* NAVIGATION */}
+            <NavBar></NavBar>
 
-      <BrowserRouter>
-        <div className="App">
+            <div className='container'>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/Register" element={<Register />} />
+                <Route path="/orders" element={<PrivateRoute />}>
+                  <Route path="" element={<Orders />} />
+                </Route>
 
-          <NavBar.Container>
-            <NavBar.Brand>Jobify.</NavBar.Brand>
-
-            <NavBar.Collapse >
-              <NavBar.Link to="orders">Orders</NavBar.Link>
-            </NavBar.Collapse>
-            <NavBar.Collapse end>
-              <NavBar.Link to="/login">Login</NavBar.Link>
-              <NavBar.Link to="/register">Register</NavBar.Link>
-            </NavBar.Collapse>
-
-          </NavBar.Container>
-          <div className='container'>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/Register" element={<Register />} />
-
-              {/* Create Order */}
-              {/* <Route path="/create" element={<PrivateRoute />}>
+                {/* Create Order */}
+                {/* <Route path="/create" element={<PrivateRoute />}>
                 <Route path="" element={<CreateOrder />} />
               </Route> */}
 
-              {/* 404  */}
+                {/* 404  */}
 
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </div >
-        </div>
-      </BrowserRouter>
-      {/* </AuthProvider> */}
-    </SocketContext.Provider>
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </div >
+          </div>
+        </BrowserRouter>
+
+      </SocketContext.Provider>
+
+    </AuthProvider>
   )
 };
 

@@ -1,80 +1,43 @@
-import React, { FC, useEffect, useRef } from 'react'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import './navbar.scss'
-interface MenuProps {
-      children?: JSX.Element | string;
-}
-interface CollapseProps {
-      children?: React.ReactNode | JSX.Element | string;
-      end?: boolean;
-}
-interface BrandProps {
-      children?: JSX.Element | string;
-      href?: string;
-}
-interface ItemProps {
-      children?: JSX.Element | string;
-}
-interface LinkProps {
-      children?: JSX.Element | string;
-      to?: string;
-}
-interface ContainerProps {
-      children?: JSX.Element | React.ReactNode;
+import React, { FC, useContext, useEffect, useState } from 'react'
+import { AuthContext } from '../../context/authContext';
+import { romoveFromLocalStorage } from '../../helpers/auth';
+import MyNavBar from '../forms/NavBar/NavBar';
+interface NavBarProps {
+
 }
 
+const NavBar: FC<NavBarProps> = ({ }) => {
+      const authContext = useContext(AuthContext)
+      const isAuth: Boolean = authContext?.auth !== null && authContext?.auth !== undefined;
+      const logout = () => {
+            console.log("logOut")
+            authContext?.setAuth(null);
+            romoveFromLocalStorage();
+      };
+      return (
 
-const NavBar = {
-      // 
-      Container: function Container(props: ContainerProps) {
-            return <div className='navbar-container'>{props.children}</div>;
-      },
-      //
-      Menu: function Menu(props: MenuProps) {
-            return <div >{props.children}</div>;
-      },
-      //
-      Collapse: function Collapse(props: CollapseProps) {
-            return <div className={`collapse ${props.end ? "end" : ""}`}>{props.children}</div>;
-      },
-      //
-      Brand: function Brand(props: BrandProps) {
-            console.log(props.children)
-            const navigate = useNavigate()
-            const location = useLocation()
-            const brandRef = useRef<HTMLDivElement>(null);
+            <MyNavBar.Container>
+                  <MyNavBar.Brand>Jobify.</MyNavBar.Brand>
 
-            // Функция проверки одинакового роута в пропсах и текущего локейшна
-            function isContainGlobalSameRoute(): boolean {
-                  const path = location.pathname;
-                  if (path === props.href) {
-                        return true
-                  } return false
-            }
+                  <MyNavBar.Collapse >
+                        <MyNavBar.Link to="orders">Orders</MyNavBar.Link>
+                  </MyNavBar.Collapse>
+                  <MyNavBar.Collapse end>
+                        {
+                              isAuth ? (<>
+                                    <MyNavBar.Link to="/login" onClick={logout}>Logout</MyNavBar.Link>
 
-            useEffect(() => {
-                  if (null !== brandRef.current) {
-                        brandRef.current.onclick = () => {
-                              if (!isContainGlobalSameRoute()) {
-                                    props.href === undefined ? navigate("/") : navigate(props.href)
-                              }
+                              </>
+                              ) :
+                                    (<><MyNavBar.Link to="/login">Login</MyNavBar.Link>
+                                          <MyNavBar.Link to="/register">Register</MyNavBar.Link></>)
                         }
-                  }
-            }, [props.href])
-
-            return <div className='navbar-brand' ref={brandRef}>
-                  <h4>{props.children}</h4>
-            </div>;
-      },
-      //
-      Item: function Item(props: ItemProps) {
-            return <div></div>;
-      },
-      Link: function Link(props: LinkProps) {
-            return <NavLink className="nav-link" to={`${props.to ?? "/"}`}>{props.children}</NavLink>;
-      },
 
 
+                  </MyNavBar.Collapse>
+
+            </MyNavBar.Container>
+      )
 }
 
 export default NavBar;
