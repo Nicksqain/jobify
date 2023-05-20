@@ -2,11 +2,14 @@ import React, { FC, useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../context/authContext';
 import { romoveFromLocalStorage } from '../../helpers/auth';
 import MyNavBar from '../forms/NavBar/NavBar';
+
+import { useTheme } from '../../context/ThemeContext';
 interface NavBarProps {
 
 }
 
 const NavBar: FC<NavBarProps> = ({ }) => {
+      const { theme, toggleTheme } = useTheme();
       const authContext = useContext(AuthContext)
       const isAuth: Boolean = authContext?.auth !== null && authContext?.auth !== undefined;
       const logout = () => {
@@ -23,6 +26,7 @@ const NavBar: FC<NavBarProps> = ({ }) => {
                         <MyNavBar.Link to="orders">Orders</MyNavBar.Link>
                   </MyNavBar.Collapse>
                   <MyNavBar.Collapse end>
+                        <a href="#" onClick={toggleTheme} className='nav-link'>Theme</a>
                         {
                               isAuth ? (<>
                                     <MyNavBar.Link to="/login" onClick={logout}>Logout</MyNavBar.Link>

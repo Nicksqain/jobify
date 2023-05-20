@@ -12,11 +12,11 @@ export const requireSignIn = (req, res, next) => {
     next();
   } catch (error) {
     if (error.name == "TokenExpiredError") {
-      // return res.status(401).json("Session was been expired!");
-      return { payload: jwt.decode(token), expired: true };
+      return res.status(401).json("Session was been expired!");
+      // return { payload: jwt.decode(token), expired: true };
     }
 
-    return res.status(401).json(error);
+    return res.status(403).json(error);
   }
 };
 // export const canChangeTask = async (req, res, next) => {

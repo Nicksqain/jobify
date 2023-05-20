@@ -1,0 +1,39 @@
+.light.app {
+  .tabs {
+    .tab {
+      &.activeTab {
+        border-bottom: 2px solid var(--accent-color);
+      }
+    }
+  }
+}
+.tabs {
+  .tab {
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-right: 20px;
+    padding-bottom: 5px;
+
+    &.activeTab {
+      border-bottom: 2px solid var(--accent-color);
+    }
+
+    &-content-body {
+      overflow: hidden;
+      // background-color: #fff;
+      // color: #2c2d2e;
+      border-radius: 7px !important;
+      // padding: 24px;
+    }
+  }
+
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  &-choose_panel {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
+}

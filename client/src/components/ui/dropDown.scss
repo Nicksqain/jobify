@@ -1,0 +1,39 @@
+button.dropdown-button {
+    background-color: inherit;
+    color: #fff;
+}
+
+
+
+.dropdown .dropdown-menu {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transition: all linear .11s;
+    top: 30px;
+    left: 50%;
+
+    .header {
+        font-weight: 700;
+        font-size: 17;
+    }
+
+    &.center {
+        transform: translateX(-50%);
+    }
+}
+
+.dropdown.show .dropdown-menu {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    top: 40px;
+    transform: translateX(-50%);
+
+    .dropdown-item a {
+        width: 100%;
+        display: block;
+    }
+
+
+}

@@ -1,21 +1,21 @@
 .login {
-      &-form {
-            height: calc(100vh - 200px);
-            display: flex;
-            align-items: center;
-      }
-
+  &-form {
+    // height: calc(100vh - 200px);
+    margin-top: 150px;
+    display: flex;
+    align-items: center;
+    form {
+      min-width: 400px;
+    }
+  }
 }
 
 h1 {
-      color: #fff;
-      margin-bottom: 40px !important;
-      font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 40px !important;
+  font-size: 2.5rem;
 }
 
 form {
-      flex: 0 0 auto;
-      width: 50%;
-      margin-left: 25%;
-
+  margin-top: 10px;
 }
