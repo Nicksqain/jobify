@@ -32,16 +32,26 @@ const Login: FC<LoginProps> = ({ }) => {
             e.preventDefault();
             try {
                   setLoading(true);
-
+                  if (authContext?.auth) {
+                        toast.error('Вы уже авторизованы!');
+                        setTimeout(() => {
+                              setLoading(false);
+                        }, 1000);
+                        return;
+                  }
                   const { data } = await axios.post(`${import.meta.env.VITE_APP_API}/signin`, {
                         email,
                         password,
                   });
-                  if (data.error) {
+
+                  if (data?.error) {
                         toast.error(data.error);
-                        setLoading(false);
+                        setTimeout(() => {
+                              setLoading(false);
+                        }, 1000);
                         return;
-                  } else {
+                  }
+                  else {
                         authContext?.setAuth(data);
                         // Save in localstorage
                         saveInLocalStorage("auth", data);

@@ -37,26 +37,26 @@ const PrivateRoute = () => {
         console.log(error);
         toast.error(error.toJSON());
         if (error.response) {
-          console.log(error.toJSON());
+          console.log("Ошибка", error.toJSON());
           RedirectToLogin();
         } else if (error.request) {
-          // Запрос был сделан, но ответ не получен
-          // `error.request`- это экземпляр XMLHttpRequest в браузере и экземпляр
-          // http.ClientRequest в node.js
           console.log(error.toJSON());
         } else {
           // Произошло что-то при настройке запроса, вызвавшее ошибку
           console.log("Error", error.message);
         }
       });
-      if (!response?.data.ok || response?.data === undefined) {
+      if (!response?.data.ok) {
+        console.log('ЧТОТО')
         RedirectToLogin();
       } else {
         setTimeout(() => {
           setLoading(false);
         }, 500); // задержка в 500 миллисекунд
       }
-    } catch (error) { }
+    } catch (error) {
+      console.log("error")
+    }
   };
 
   useEffect(() => {

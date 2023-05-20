@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import jwt from "jsonwebtoken";
+require("dotenv").config();
+
 import nanoid from "nanoid";
 
 // sendgrid
@@ -68,9 +70,13 @@ export const signup = async (req: Request, res: Response) => {
       });
 
       // create signed token
-      const token = jwt.sign({ _id: user.id }, process.env.JWT_SECRET!, {
-        expiresIn: "7d",
-      });
+      const token = jwt.sign(
+        { _id: user.id },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: "7d",
+        }
+      );
 
       //   console.log(user);
       const { password, ...rest } = user;
@@ -93,14 +99,14 @@ export const signin = async (req: Request, res: Response) => {
     // check if our db has user with that email
     const user = await prisma.user.findUnique({ where: { email: email } });
     if (!user) {
-      return res.status(400).send({
+      return res.json({
         error: "No user founds",
       });
     }
     // check password
     const match = await comparePassword(password, user.password);
     if (!match) {
-      return res.status(400).json({
+      return res.json({
         error: "Wrong password",
       });
     }

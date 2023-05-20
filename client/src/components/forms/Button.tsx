@@ -15,14 +15,14 @@ const Button: FC<ButtonProps> = ({ handleSubmit, name = "", email = "", password
     <button
       onClick={handleSubmit}
       type="submit"
-      className="main-btn"
+      className="main-btn primary-button"
       disabled={(name && !name) || !email || email.length < 6 || password.length < 6}
     >
       {loading ? (
         <ThreeDots
           height="25"
           width="25"
-          color="#0b5ed7"
+          color="var(--accent-color)"
           ariaLabel="rotating-square-loading"
           radius="6"
           wrapperStyle={{ position: "absolute", right: "-40px" }}

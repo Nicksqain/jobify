@@ -2,11 +2,14 @@ import { useState, useEffect, createContext, useContext, FC } from "react";
 import axios from "axios";
 import { getFromLocalStorage, romoveFromLocalStorage } from "../helpers/auth";
 // import SocketContext from "./socketContext";
+interface IUser {
+      status: string
+}
 interface IAuth {
       token: string,
-      user: Object
+      user: IUser
 }
-type AuthContextType = {
+export type AuthContextType = {
       auth: IAuth | null,
       setAuth: React.Dispatch<React.SetStateAction<IAuth | null>>
 }
@@ -65,7 +68,7 @@ const AuthProvider: FC<Props> = ({ children }: Props) => {
             },
             function (error) {
                   if (error.response.status === 401 || error.status === 403) {
-                        console.log("401 error");
+                        console.log(error);
                         setAuth(null);
                         romoveFromLocalStorage();
                   }
