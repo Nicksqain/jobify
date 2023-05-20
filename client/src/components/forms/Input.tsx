@@ -17,7 +17,7 @@ const Input = (props: InputProps) => {
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
         type={props.type}
-        className="form-control"
+        className="form-control j-input"
       />
       {/* <div className={type + "Help form-text"}>{help}</div> */}
     </div>

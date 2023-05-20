@@ -1,0 +1,200 @@
+html.light {
+  background-color: var(--background-color-light);
+}
+html.dark {
+  background-color: var(--background-color-dark);
+}
+a {
+  font-weight: 500;
+  color: inherit;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #3b974e;
+  // color: #535bf2;
+}
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  /* background-color: #242424; */
+  --accent-color: #3b974e;
+  --primary-color: #73f190;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  /* Светлая тема */
+
+  // Цвет фона
+  --background-color-light: #fff;
+
+  // Цвет фона инпута
+  --input-background-color-light: #dae9e3;
+  // Цвет текста инпута
+  --input-color-light: #1e1e22;
+
+  // Цвет текста основной кнопки
+  --text-color-light: #1e1e22;
+  // Цвет фона основной кнопки
+  --primary-button-background-light: #73f190;
+  // Цвет текста кнопки
+  --primary-button-color-light: #1e1e22;
+
+  // Цвет фона вторичной кнопки
+  --secondary-button-background-light: #17181b;
+  // Цвет текста вторичной кнопки
+  --secondary-button-color-light: #ffffff;
+
+  /* Темная тема */
+
+  // Цвет фона
+  --background-color-dark: #1e1e22;
+
+  // Цвет фона инпута
+  --input-background-color-dark: #dae9e3;
+  // Цвет текста инпута
+  --input-color-dark: #fbfaf3;
+
+  // Цвет акцента
+  --accent-color-dark: #00ff00;
+  // Цвет текста
+  --text-color-dark: #fff;
+
+  // Цвет фона основной кнопки
+  --primary-button-background-dark: #73f190;
+  // Цвет текста кнопки
+  --primary-button-color-dark: #1e1e22;
+
+  // Цвет фона вторичной кнопки
+  --secondary-button-background-dark: #17181b;
+  // Цвет текста вторичной кнопки
+  --secondary-button-color-dark: #ffffff;
+}
+
+.light.app {
+  /* Стили для светлой темы */
+  background-color: var(--background-color-light);
+  color: var(--text-color-light) !important;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #0e101a;
+  }
+  .primary-button {
+    /* Стили для основной кнопки в темной теме */
+    background-color: var(--primary-button-background-light);
+    color: var(--primary-button-color-light);
+  }
+
+  .secondary-button {
+    /* Стили для основной кнопки в темной теме */
+    background-color: var(--secondary-button-background-light);
+    color: var(--secondary-button-color-light);
+  }
+
+  .text {
+    color: var(--text-color-light);
+  }
+
+  .j-input {
+    background-color: var(--input-background-color-light) !important;
+    color: var(--input-color-light) !important;
+  }
+}
+
+.dark.app {
+  /* Стили для темной темы */
+  background-color: var(--background-color-dark);
+  color: var(--text-color-dark) !important;
+
+  .primary-button {
+    /* Стили для основной кнопки в темной теме */
+    background-color: var(--primary-button-background-dark);
+    color: var(--primary-button-color-dark);
+  }
+
+  .secondary-button {
+    /* Стили для основной кнопки в темной теме */
+    background-color: var(--secondary-button-background-dark);
+    color: var(--secondary-button-color-dark);
+  }
+  .text {
+    color: var(--text-color-dark);
+  }
+  .accent {
+    color: var(--text-color-dark);
+  }
+  .navbar-container {
+    color: #fff;
+  }
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+  margin-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+#root,
+html,
+body,
+.App {
+  height: 100%;
+}
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+// @media (prefers-color-scheme: light) {
+//   :root {
+//     color: #213547;
+//     background-color: #ffffff;
+//   }
+//   a:hover {
+//     color: #747bff;
+//   }
+//   button {
+//     background-color: #f9f9f9;
+//   }
+// }

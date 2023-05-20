@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import authRoutes from "./routes/auth";
 import morgan from "morgan";
+
 var bodyParser = require("body-parser");
 const prisma = new PrismaClient();
 const app = express();
