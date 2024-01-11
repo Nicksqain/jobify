@@ -1,18 +1,29 @@
 import jwt from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
 
 // import Task from "../models/task";
 // import User from "../models/user";
-export const requireSignIn = (req, res, next) => {
+
+const prisma = new PrismaClient();
+export const requireSignIn = async (req, res, next) => {
   try {
     const decoded = jwt.verify(
       req.headers.authorization,
       process.env.JWT_SECRET
     );
+    const user = await prisma.user.findFirst({
+      where: { id: decoded._id },
+    });
+    if (!user) {
+      return res.status(401).json("Session was been expired!");
+    }
     req.user = decoded;
     next();
   } catch (error) {
+    if (error) {
+      console.log(error);
+    }
     if (error.name == "TokenExpiredError") {
-      return res.status(401).json("Session was been expired!");
       // return { payload: jwt.decode(token), expired: true };
     }
 

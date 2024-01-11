@@ -4,10 +4,14 @@ html.light {
 html.dark {
   background-color: var(--background-color-dark);
 }
+p {
+  padding-bottom: 3px;
+}
 a {
   font-weight: 500;
   color: inherit;
   text-decoration: inherit;
+  cursor: pointer;
 }
 a:hover {
   color: #3b974e;
@@ -28,7 +32,15 @@ a:hover {
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
+  // DANGER
+  --danger-background-color: #df4646;
+  // --danger-background-color: #f35a5a;
+  // SECONDARY
+  --secondary-background-color: #898989;
+  // --secondary-background-color: #434e62;
   /* Светлая тема */
+
+  --white: #fff;
 
   // Цвет фона
   --background-color-light: #fff;
@@ -56,7 +68,7 @@ a:hover {
   --background-color-dark: #1e1e22;
 
   // Цвет фона инпута
-  --input-background-color-dark: #dae9e3;
+  --input-background-color-dark: #45494f;
   // Цвет текста инпута
   --input-color-dark: #fbfaf3;
 
@@ -75,7 +87,38 @@ a:hover {
   // Цвет текста вторичной кнопки
   --secondary-button-color-dark: #ffffff;
 }
+// BUTTONS
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color, transform ease 0.25s;
+}
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 80px -10px #73f190;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+.danger-btn {
+  background-color: var(--danger-background-color);
+  color: var(--white);
+  &:hover {
+    box-shadow: 0 20px 80px -10px var(--danger-background-color) !important;
+  }
+}
 
+.secondary-btn {
+  background-color: var(--secondary-background-color);
+  color: var(--white);
+}
 .light.app {
   /* Стили для светлой темы */
   background-color: var(--background-color-light);
@@ -86,7 +129,8 @@ a:hover {
   h3,
   h4,
   h5,
-  h6 {
+  h6,
+  select {
     color: #0e101a;
   }
   .primary-button {
@@ -108,6 +152,10 @@ a:hover {
   .j-input {
     background-color: var(--input-background-color-light) !important;
     color: var(--input-color-light) !important;
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 0.15rem #0d8065 !important;
+    }
   }
 }
 
@@ -167,25 +215,53 @@ h1 {
   line-height: 1.1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+// СТАНДАРТНЫЙ НАБОР КЛАССОВ
+.w100 {
+  width: 100%;
 }
-button:hover {
-  border-color: #646cff;
+.pd-5 {
+  padding: 5px;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.pd-10 {
+  padding: 10px;
 }
-
+// СТАНДАРТНЫЙ ФЛЕКС
+.dflex {
+  display: flex;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-column {
+  flex-direction: column;
+}
+.flex-row {
+  flex-direction: row;
+}
+.align-items-start {
+  align-items: start;
+}
+.align-items-center {
+  align-items: center;
+}
+.align-items-end {
+  align-items: end;
+}
+.justify-content-end {
+  justify-content: end;
+}
+.gap-10 {
+  gap: 10px;
+}
+.gap-15 {
+  gap: 15px;
+}
+.gap-20 {
+  gap: 20px;
+}
+.gap-25 {
+  gap: 25px;
+}
 // @media (prefers-color-scheme: light) {
 //   :root {
 //     color: #213547;

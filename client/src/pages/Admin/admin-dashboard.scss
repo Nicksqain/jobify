@@ -1,0 +1,17 @@
+.admin-dashboard {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  .admin-sidebar {
+    // padding: 5px 10px;
+    .title {
+      padding: 5px 10px;
+      border-radius: 4px;
+      background-color: rgba(115, 241, 144, 0.18);
+    }
+  }
+  .admin-layout {
+    flex: 1;
+  }
+}

@@ -127,6 +127,20 @@ export const signin = async (req: Request, res: Response) => {
   }
 };
 
+// GET
+export const getUser = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    res.json(user);
+  } catch (error) {
+    res.status(400).send("Пользователь не найден!");
+  }
+};
+//
+
 // export const forgotPassword = async (req, res) => {
 //   const { email } = req.body;
 //   // find user by email

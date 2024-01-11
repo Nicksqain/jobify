@@ -3,20 +3,22 @@ import { FC } from "react";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "./button.scss";
 interface ButtonProps {
-  handleSubmit: React.MouseEventHandler<HTMLButtonElement>;
+  handleSubmit?: React.MouseEventHandler<HTMLButtonElement>;
+  handleClick?: React.MouseEventHandler<HTMLButtonElement>;
   name?: string;
+  text?: string;
   email?: string;
   password?: string;
-  loading: boolean;
+  loading?: boolean;
 
 }
-const Button: FC<ButtonProps> = ({ handleSubmit, name = "", email = "", password = "", loading = false }: ButtonProps) => {
+const Button: FC<ButtonProps> = ({ handleSubmit, handleClick, name = "", email = "", password = "", loading = false, text }: ButtonProps) => {
   return (
     <button
-      onClick={handleSubmit}
+      onClick={handleSubmit || handleClick}
       type="submit"
       className="main-btn primary-button"
-      disabled={(name && !name) || !email || email.length < 6 || password.length < 6}
+    // disabled={(name && !name) || !email || email.length < 6 || password.length < 6}
     >
       {loading ? (
         <ThreeDots
@@ -32,7 +34,7 @@ const Button: FC<ButtonProps> = ({ handleSubmit, name = "", email = "", password
       ) : (
         void 0
       )}
-      <span>Submit</span>
+      <span>{text ?? "Submit"}</span>
     </button>
   );
 };
