@@ -1,0 +1,88 @@
+/********** Range Input Styles **********/
+/*Range Reset*/
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  // width: 15rem;
+}
+
+/* Removes default focus */
+input[type="range"]:focus {
+  outline: none;
+}
+
+/***** Chrome, Safari, Opera and Edge Chromium styles *****/
+/* slider track */
+input[type="range"]::-webkit-slider-runnable-track {
+  background-color: #053a5f;
+  border-radius: 0.5rem;
+  height: 0.5rem;
+}
+
+/* slider thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  margin-top: -12px; /* Centers thumb on the track */
+
+  /*custom styles*/
+  background-color: #5cd5eb;
+  height: 2rem;
+  width: 1rem;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  border: 1px solid #053a5f;
+  outline: 3px solid #053a5f;
+  outline-offset: 0.125rem;
+}
+
+/******** Firefox styles ********/
+/* slider track */
+input[type="range"]::-moz-range-track {
+  border-radius: 0.5rem;
+  height: 0.3rem;
+  background-color: #3b974e;
+}
+
+/* slider thumb */
+input[type="range"]::-moz-range-thumb {
+  border: rgb(5, 95, 58) 3px solid; /*Removes extra border that FF applies*/
+
+  border-radius: 50%; /*Removes default border-radius that FF applies*/
+  background-color: transparent;
+  /*custom styles*/
+  height: 1.1rem;
+  transition: 0.3s;
+  width: 1.1rem;
+}
+input:active::-webkit-slider-thumb,
+input:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 10px inset rgb(5, 95, 58);
+}
+
+input:active::-moz-range-thumb,
+input:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 10px inset rgb(5, 95, 58);
+}
+
+.light.app {
+  input[type="range"]::-moz-range-thumb {
+    background-color: var(--background-color-light);
+    outline: 2px solid var(--background-color-light);
+  }
+}
+.dark.app {
+  input[type="range"]::-moz-range-thumb {
+    background-color: var(--background-color-dark);
+    outline: 2px solid var(--background-color-dark);
+  }
+}
+
+// input[type="range"]:focus::-moz-range-thumb {
+//   border: 1px solid #053a5f;
+//   outline: 3px solid #053a5f;
+//   outline-offset: 0.125rem;
+// }

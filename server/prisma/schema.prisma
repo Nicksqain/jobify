@@ -2,24 +2,83 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
   extensions = [uuidOssp(map: "uuid-ossp")]
 }
+
 model User {
-  id String? @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
-  fullname String
-  email String  @unique
-  password String
-  role String? @default("user")
-  status Status @default(freelancer)
+  id           String         @id @unique @default(uuid())
+  fullname     String
+  email        String         @unique
+  password     String
+  role         Role           @default(user)
+  status       Status         @default(freelancer)
+  orders       Order[]
+  Notification Notification[]
 }
+
+enum Role {
+  user
+  admin
+  moderator
+}
+
 enum Status {
   freelancer
   orderer
+}
+
+model Order {
+  id                    Int            @id @default(autoincrement())
+  orderName             String         @db.VarChar(255) // Поле названия заказа
+  category              String         @db.VarChar(70) // Поле категории заказа
+  placeOfService        PlaceOfService // Поле места указания услуги (например, "у меня", "у заказчика", "неважно")
+  description           String?        @db.VarChar(1000) // Поле описания заказа
+  budgetMin             Int // Поле для нижней границы бюджета
+  budgetMax             Int // Поле для верхней границы бюджета
+  agreedBudget          Int?
+  createdAt             DateTime?      @default(now())
+  updatedAt             DateTime?      @default(now())
+  moderationComment     String?        @db.VarChar(1000) // Поле для комментария модератора к отклоненному заказу
+  status                OrderStatus?   @default(pending_approval) // Поле для статуса заказа (например, "в обработке", "выполнен")
+  startExecutionDate    DateTime? // Поле для даты старта выполнения заказа
+  completionDate        DateTime? // Поле для даты выполнения заказа
+  plannedCompletionDate DateTime? // Поле для планируемой даты выполнения заказа
+
+  // Определение отношения многие-к-одному с пользователем
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Отношение к пользователю
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+enum PlaceOfService {
+  myPlace
+  freelancerPlace
+  dontMatter
+}
+
+enum OrderStatus {
+  // created
+  pending_approval
+  published
+  inprogress
+  completed
+  cancelled
+  rejected
 }

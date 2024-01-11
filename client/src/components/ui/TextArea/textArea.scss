@@ -1,0 +1,30 @@
+.j-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  height: auto;
+  min-height: 100px;
+  outline: none;
+  border: none;
+  box-shadow: 0 0 0 0.15rem rgba(13, 128, 101, 0.4);
+  border-radius: 4px;
+  transition: box-shadow 0.3s ease;
+  font-size: 14px;
+  -webkit-appearance: none; /* Убираем стандартные стили вебкит-браузеров */
+  -moz-appearance: none; /* Убираем стандартные стили Firefox */
+  appearance: none; /* Убираем стандартные стили для других браузеров */
+  &:focus {
+    box-shadow: 0 0 0 0.15rem #0d8065 !important;
+  }
+}
+
+.light.app {
+  .j-textarea {
+    background-color: #fff;
+    color: var(--text-color-light);
+  }
+}
+.dark.app {
+  .j-textarea {
+    background-color: #45494f !important;
+  }
+}

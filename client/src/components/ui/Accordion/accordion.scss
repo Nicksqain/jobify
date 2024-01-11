@@ -1,0 +1,12 @@
+.accordion-header {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 5px;
+  .arrow {
+    display: flex;
+    &.open {
+      transform: scaleY(-1);
+    }
+  }
+}

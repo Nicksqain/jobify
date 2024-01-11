@@ -1,0 +1,41 @@
+/* Обертка радиокнопки */
+.j-radio {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+  & input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  & .radio-icon {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+  /* Стили для активной кастомной радиокнопки */
+  & input[type="radio"]:checked + .radio-icon {
+    background-color: #999;
+  }
+  & input[type="radio"]:checked + .radio-icon::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+  /* Стили для текста рядом с радиокнопкой */
+  & .radio-label {
+    vertical-align: middle;
+  }
+}

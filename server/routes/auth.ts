@@ -1,5 +1,5 @@
 // Deps
-import express from "express";
+import express, { Request } from "express";
 
 // Middlewares
 import { requireSignIn } from "../middlewares";
@@ -13,7 +13,7 @@ import {
   // forgotPassword,
   // resetPassword,
   // allUsers,
-  // getUser,
+  getUser,
 } from "../controllers/auth";
 
 // router.get("/", (req, res) => {
@@ -23,14 +23,13 @@ import {
 // });
 router.post("/signup", signup);
 router.post("/signin", signin);
+// Auth check middleware
+router.get("/auth-check", requireSignIn, (req: Request, res) => {
+  res.status(200).json({ ok: true });
+});
 // router.post("/forgot-password", forgotPassword);
 // router.post("/reset-password", resetPassword);
 // router.get("/users", allUsers);
-// router.get("/user", getUser);
-
-// Auth check middleware
-router.get("/auth-check", requireSignIn, (req, res) => {
-  res.json({ ok: true });
-});
+router.get("/:userId", getUser);
 
 export default router;

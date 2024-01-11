@@ -1,0 +1,46 @@
+.j-radio-group {
+  display: flex;
+  flex-direction: column;
+  .j-radio {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+input[type="radio"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none; /* Убираем стандартные стили вебкит-браузеров */
+  -moz-appearance: none; /* Убираем стандартные стили Firefox */
+  appearance: none; /* Убираем стандартные стили для других браузеров */
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0;
+}
+
+input[type="radio"] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid #ccc;
+  border-radius: 50%;
+
+  display: grid;
+  place-content: center;
+}
+input[type="radio"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--text-color-light);
+}
+input[type="radio"]:checked::before {
+  transform: scale(1);
+}

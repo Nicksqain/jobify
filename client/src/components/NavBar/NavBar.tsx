@@ -4,6 +4,7 @@ import { romoveFromLocalStorage } from '../../helpers/auth';
 import MyNavBar from '../forms/NavBar/NavBar';
 
 import { useTheme } from '../../context/ThemeContext';
+import Select from '../ui/Select/Select';
 interface NavBarProps {
 
 }
@@ -26,9 +27,16 @@ const NavBar: FC<NavBarProps> = ({ }) => {
                         <MyNavBar.Link to="orders">Orders</MyNavBar.Link>
                   </MyNavBar.Collapse>
                   <MyNavBar.Collapse end>
-                        <a href="#" onClick={toggleTheme} className='nav-link'>Theme</a>
+                        <a onClick={toggleTheme} className='nav-link'>Theme</a>
                         {
                               isAuth ? (<>
+                                    <Select isCustom title={authContext?.auth?.user?.fullname}
+
+                                    >
+                                          <option value="it"><MyNavBar.Link to="/admin">Admin</MyNavBar.Link></option>
+                                          <option data-setdefault value="art">ART</option>
+                                          <option value="design">DESIGN</option>
+                                    </Select>
                                     <MyNavBar.Link to="/login" onClick={logout}>Logout</MyNavBar.Link>
 
                               </>

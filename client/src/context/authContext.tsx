@@ -1,8 +1,12 @@
 import { useState, useEffect, createContext, useContext, FC } from "react";
 import axios from "axios";
 import { getFromLocalStorage, romoveFromLocalStorage } from "../helpers/auth";
+import { setUser } from "../slices/user.slice";
+import { useAppDispatch } from "../hooks/redux";
 // import SocketContext from "./socketContext";
 interface IUser {
+      role: string;
+      id: string
       status: string
 }
 interface IAuth {
@@ -53,6 +57,7 @@ const AuthProvider: FC<Props> = ({ children }: Props) => {
       // axios.defaults.baseURL = import.meta.env.VITE_APP_API;
       axios.defaults.baseURL = import.meta.env.VITE_APP_API;
       axios.defaults.headers.common["Authorization"] = auth?.token;
+      axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'true';
 
       // axios.interceptors.request.use(function (config) {
       //   // Здесь можете сделать что-нибудь с перед отправкой запроса
@@ -72,14 +77,15 @@ const AuthProvider: FC<Props> = ({ children }: Props) => {
                         setAuth(null);
                         romoveFromLocalStorage();
                   }
-                  // return Promise.reject(error);
+                  return Promise.reject(error);
             }
       );
-
+      const dispatch = useAppDispatch()
       useEffect(() => {
             let data = getFromLocalStorage("auth");
             if (data) {
                   setAuth(data);
+                  dispatch(setUser(data.user))
             }
             // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);

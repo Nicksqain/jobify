@@ -3,8 +3,9 @@ import { AuthContext } from '../../context/authContext';
 import { NavLink } from 'react-router-dom';
 import Tabs from '../../components/ui/Tabs/Tabs';
 import Tab from '../../components/ui/Tabs/Tab';
-import AllOrders from './AllOrders/AllOrders';
+import AllUserOrders from './AllOrders/AllUserOrders';
 import './orders.scss';
+import AllOrders from './AllOrders/AllOrders';
 interface OrdersProps {
 
 }
@@ -34,25 +35,31 @@ const Orders: FC<OrdersProps> = ({ }) => {
                               {freelancer && (
                                     <>
                                           <span>Найти задание для выполнения заказа</span>
-                                          <button>Find a task</button>
+                                          <button className='primary-button'>Найти задание</button>
                                     </>
                               )}
                               {orderer && (
                                     <>
                                           <span>Создайте заказ и выберите исполнителя</span>
-                                          <NavLink to="/create">
-                                                <button>Create a task</button>
+                                          <NavLink to="create">
+                                                <button className='primary-button'>Создать задание</button>
                                           </NavLink>
                                     </>
                               )}
                         </div>
                   </div>
-                  <Tabs>
-                        <Tab title="All orders">
-                              <AllOrders />
+                  <h1>All orders</h1>
+                  <AllOrders />
+                  <h1>All user orders</h1>
+                  <AllUserOrders />
+
+                  {/* <Tabs>
+                        <Tab title="Все заказы">
+                              <AllUserOrders />
                         </Tab>
-                        <Tab title="In progress">В процессе</Tab>
-                  </Tabs>
+                        <Tab title="В работе">В процессе</Tab>
+                        <Tab title="Отмененные">Отмененные</Tab>
+                  </Tabs> */}
             </div>
       );
 }

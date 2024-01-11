@@ -8,7 +8,8 @@ const LoadingToRedirect: FC = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
-      <ThreeDots color="#5f5cee" wrapperStyle={{ marginTop: "0px" }} />
+      <ThreeDots color="#73f190" wrapperStyle={{ marginTop: "0px" }} />
+      {/* <ThreeDots color="#5f5cee" wrapperStyle={{ marginTop: "0px" }} /> */}
     </div>
   );
 };

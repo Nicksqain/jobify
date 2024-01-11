@@ -39,7 +39,7 @@ const Login: FC<LoginProps> = ({ }) => {
                         }, 1000);
                         return;
                   }
-                  const { data } = await axios.post(`${import.meta.env.VITE_APP_API}/signin`, {
+                  const { data } = await axios.post(`${import.meta.env.VITE_APP_API}/auth/signin`, {
                         email,
                         password,
                   });
@@ -80,13 +80,11 @@ const Login: FC<LoginProps> = ({ }) => {
                         <h1>Login</h1>
                         <Input
                               type="email"
-                              value={email}
                               label="Email"
                               setValue={setEmail}
                         />
                         <Input
                               type="password"
-                              value={password}
                               label="Password"
                               setValue={setPassword}
                         />

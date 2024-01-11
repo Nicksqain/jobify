@@ -24,11 +24,7 @@ const ListGroup: FC<ListGroupProps> = ({ children, setValue, horizontal, selecta
 
   const orientationCheck = horizontal ? "list-group-horizontal" : "";
   // FUNCTIONS
-  useEffect(() => {
-    if (choosen) {
-      setValue(choosen);
-    }
-  }, [choosen, setValue]);
+
   useEffect(() => {
     let listGroupItems: HTMLElement[] = [];
 
