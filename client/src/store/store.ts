@@ -1,11 +1,12 @@
 // store/store.ts
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { orderSlice, userSlice } from "../slices";
+import { orderSlice, userSlice, notificationSlice } from "../slices";
 // import { localStorageMiddleware } from "../slices/cartSlice";
 
 const rootReducer = combineReducers({
   orderSlice,
   userSlice,
+  notificationSlice,
 });
 
 export const setupStore = () => {
