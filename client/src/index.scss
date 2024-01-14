@@ -36,7 +36,7 @@ a:hover {
   --danger-background-color: #df4646;
   // --danger-background-color: #f35a5a;
   // SECONDARY
-  --secondary-background-color: #898989;
+  --secondary-background-color: #333338;
   // --secondary-background-color: #434e62;
   /* Светлая тема */
 
@@ -88,7 +88,7 @@ a:hover {
   --secondary-button-color-dark: #ffffff;
 }
 // BUTTONS
-button {
+.j-button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -99,7 +99,7 @@ button {
   cursor: pointer;
   transition: border-color, transform ease 0.25s;
 }
-button:hover {
+.j-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 20px 80px -10px #73f190;
 }
