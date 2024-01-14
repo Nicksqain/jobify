@@ -1,44 +1,43 @@
 .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-
-      &-container {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: 25px 0;
-      }
+  &-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 25px 0;
+  }
 }
 
 h4 {
-      margin: 0;
+  margin: 0;
 }
 
 .navbar-brand {
-      white-space: nowrap;
-      display: inline-flex;
-      padding: 5px 0;
-      margin-right: 16px;
-      cursor: pointer;
-
+  white-space: nowrap;
+  display: inline-flex;
+  padding: 5px 0;
+  margin-right: 16px;
+  cursor: pointer;
 }
 
 .nav-link {
-      padding: 8px;
-      font-size: 16px;
-      font-weight: 400;
+  padding: 8px;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .collapse {
-      display: flex;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
+  &.end {
+    width: 100%;
+    display: flex;
 
-      &.end {
-            width: 100%;
-            display: flex;
-
-            justify-content: flex-end;
-      }
+    justify-content: flex-end;
+  }
 }
