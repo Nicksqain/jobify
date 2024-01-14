@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import authRoutes from "./routes/auth";
 import ordersRoutes from "./routes/orders";
 import statsRoutes from "./routes/stats";
+import notificationsRoutes from "./routes/notifications";
 import morgan from "morgan";
 
 var bodyParser = require("body-parser");
@@ -45,6 +46,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRoutes);
 
+app.use("/notifications", notificationsRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/stats", statsRoutes);
 
