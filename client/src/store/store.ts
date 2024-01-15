@@ -1,7 +1,7 @@
 // store/store.ts
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { orderSlice, userSlice, notificationSlice } from "../slices";
-// import { localStorageMiddleware } from "../slices/cartSlice";
+import socketMiddleware from "../middlewares/socketMiddleware";
 
 const rootReducer = combineReducers({
   orderSlice,
@@ -12,6 +12,8 @@ const rootReducer = combineReducers({
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(socketMiddleware),
   });
 };
 export type RootState = ReturnType<typeof rootReducer>;
