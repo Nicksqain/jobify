@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { fetchUserNotifications, markAsRead, selectError, selectNotifications, selectNotificationsLoading } from '../../slices/notification.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import './notification.scss'
+import { Box, List, ListItem, Text } from '@chakra-ui/react';
+// import './notification.scss'
 
 const Notifications = () => {
       const dispatch = useAppDispatch();
@@ -21,22 +22,23 @@ const Notifications = () => {
       };
 
       return (
-            <div className='notifications'>
+            <Box px={2}>
                   {loading && <p>Загрузка...</p>}
                   {error && <p>Ошибка: {error}</p>}
-                  <ul className='notification-list'>
+                  <List spacing={3}>
                         {notifications && notifications.map((notification) => (
-                              <li key={notification.id} className='notification'>
-                                    <div className='message'>{notification.message}</div>
+                              <ListItem key={notification.id} className='notification'>
+                                    <Text className='message'>{notification.message} </Text>
                                     {!notification.isRead && (
                                           <button onClick={() => handleMarkAsRead(notification.id)}>
                                                 Отметить как прочитанное
                                           </button>
                                     )}
-                              </li>
+                              </ListItem>
                         ))}
-                  </ul>
-            </div>
+                  </List>
+            </Box>
+
       );
 };
 
