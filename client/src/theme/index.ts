@@ -1,26 +1,22 @@
-import { extendTheme } from "@chakra-ui/react";
+import { StyleFunctionProps, extendTheme } from "@chakra-ui/react";
+import { globalStyles } from "./styles";
+import { darkColors, lightColors } from "./colors";
 const theme = extendTheme({
   config: {
     initialColorMode: "light",
     useSystemColorMode: false,
   },
   colors: {
-    light: {
-      background: "#FFFFFF",
-      text: "#333333",
-    },
-    dark: {
-      background: "#1A202C",
-      text: "#FFFFFF",
-    },
+    light: lightColors,
+    dark: darkColors,
   },
-  styles: {
-    global: {
-      body: {
-        fontFamily: "body",
-        bg: "light.background",
-        color: "light.text",
-      },
+  styles: globalStyles,
+  components: {
+    Text: {
+      baseStyle: ({ colorMode }: StyleFunctionProps) => ({
+        bg: colorMode === "dark" ? "green.300" : "green.500",
+        color: colorMode === "dark" ? "gray.800" : "white",
+      }),
     },
   },
 });

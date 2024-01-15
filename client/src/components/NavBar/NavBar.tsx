@@ -24,27 +24,56 @@ import {
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import Notifications from '../Notifications/Notifications';
+import { useAppSelector } from '../../hooks/redux';
 interface NavBarProps {
 
 }
 function NotificationMenu() {
+      const { notifications } = useAppSelector(state => state.notificationSlice)
+      const hasUnreadNotifications = notifications.some(notification => !notification.isRead);
+      console.log(notifications)
       return (
             <Menu >
-                  <MenuButton as={IconButton} cursor="pointer" icon={<svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        className="icon icon-tabler icon-tabler-bell"
-                        viewBox="0 0 24 24"
+                  <MenuButton
+                        as={IconButton}
+                        cursor="pointer"
+                        position="relative"
+                        icon={
+                              <>
+                                    <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="24"
+                                          height="24"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          className="icon icon-tabler icon-tabler-bell"
+                                          viewBox="0 0 24 24"
+                                    >
+                                          <path stroke="none" d="M0 0h24v24H0z"></path>
+                                          <path d="M10 5a2 2 0 014 0 7 7 0 014 6v3a4 4 0 002 3H4a4 4 0 002-3v-3a7 7 0 014-6M9 17v1a3 3 0 006 0v-1"></path>
+                                    </svg>
+                                    {hasUnreadNotifications && (
+                                          <span
+                                                style={{
+                                                      position: "absolute",
+                                                      top: "8px",
+                                                      right: "8px",
+                                                      width: "10px",
+                                                      height: "10px",
+                                                      borderRadius: "50%",
+                                                      backgroundColor: "#df4646",
+                                                }}
+                                          ></span>
+                                    )}
+                              </>
+
+                        }
+
                   >
-                        <path stroke="none" d="M0 0h24v24H0z"></path>
-                        <path d="M10 5a2 2 0 014 0 7 7 0 014 6v3a4 4 0 002 3H4a4 4 0 002-3v-3a7 7 0 014-6M9 17v1a3 3 0 006 0v-1"></path>
-                  </svg>}>
+
                   </MenuButton>
                   <MenuList zIndex="1">
                         <Notifications />

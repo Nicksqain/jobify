@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../../context/authContext';
 import { romoveFromLocalStorage } from '../../../helpers/auth';
 import './navbar.scss'
+import { Box } from '@chakra-ui/react';
 interface MenuProps {
       children?: JSX.Element | string;
 }
@@ -29,7 +30,7 @@ interface ContainerProps {
 const MyNavBar = {
       // 
       Container: function Container(props: ContainerProps) {
-            return <div className='navbar-container'>{props.children}</div>;
+            return <Box className='navbar-container'>{props.children}</Box>;
       },
       //
       Menu: function Menu(props: MenuProps) {

@@ -1,9 +1,9 @@
-html.light {
-  background-color: var(--background-color-light);
-}
-html.dark {
-  background-color: var(--background-color-dark);
-}
+// html.light {
+//   background-color: var(--background-color-light);
+// }
+// html.dark {
+//   background-color: var(--background-color-dark);
+// }
 p {
   padding-bottom: 3px;
 }
@@ -21,8 +21,6 @@ a:hover {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
   /* background-color: #242424; */
   --accent-color: #3b974e;
   --primary-color: #73f190;
@@ -119,10 +117,11 @@ button:focus-visible {
   background-color: var(--secondary-background-color);
   color: var(--white);
 }
-.light.app {
+// .app {
+//   background-color: light-dark(#fff, #1e1e22) !important;
+// }
+.light .app {
   /* Стили для светлой темы */
-  background-color: var(--background-color-light);
-  color: var(--text-color-light) !important;
 
   h1,
   h2,
@@ -159,10 +158,8 @@ button:focus-visible {
   }
 }
 
-.dark.app {
+.dark .app {
   /* Стили для темной темы */
-  background-color: var(--background-color-dark);
-  color: var(--text-color-dark) !important;
 
   .primary-button {
     /* Стили для основной кнопки в темной теме */
@@ -180,9 +177,6 @@ button:focus-visible {
   }
   .accent {
     color: var(--text-color-dark);
-  }
-  .navbar-container {
-    color: #fff;
   }
 }
 
@@ -274,3 +268,5 @@ h1 {
 //     background-color: #f9f9f9;
 //   }
 // }
+
+// Темы
