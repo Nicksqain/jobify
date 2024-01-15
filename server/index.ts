@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import http from "http";
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import authRoutes from "./routes/auth";
@@ -7,12 +8,14 @@ import ordersRoutes from "./routes/orders";
 import statsRoutes from "./routes/stats";
 import notificationsRoutes from "./routes/notifications";
 import morgan from "morgan";
-
+import initSocket from "./socket";
 var bodyParser = require("body-parser");
 const prisma = new PrismaClient();
 const app = express();
-app.use(cors());
 
+const server = http.createServer(app);
+app.use(cors());
+const io = initSocket(server);
 const setSecurityHeaders = (_: Request, res: Response, next: NextFunction) => {
   res.set({
     "X-Content-Type-Options": "nosniff",
@@ -80,6 +83,5 @@ app.post("/feed", async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 });
-app.listen(8000, () => {
-  console.log("Application started on port 8000!");
-});
+
+server.listen(8000, () => console.log("Server running on port 8000"));
