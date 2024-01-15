@@ -36,33 +36,35 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ }) => {
       data: Object
     }
     try {
-      const response = await axios.get(`/auth/auth-check`).catch(function (error) {
-        console.log(response);
-        toast.error(error.toJSON());
-        if (error.response.data.name == "TokenExpiredError") {
-          authContext?.setAuth(null);
-          romoveFromLocalStorage();
-        }
-        if (error.response) {
-          console.log("Ошибка", error.toJSON());
-          RedirectToLogin();
-        } else if (error.request) {
-          console.log(error.toJSON());
-        } else {
-          // Произошло что-то при настройке запроса, вызвавшее ошибку
-          console.log("Error", error.message);
-        }
-      });
+      const response = await axios.get(`/auth/auth-check`);
+      console.log(response);
+
       if (!response?.data?.ok) {
-        console.log(response)
+        console.log(response);
+        toast.error("Ошибка");
         RedirectToLogin();
       } else {
         setTimeout(() => {
           setLoading(false);
         }, 500); // задержка в 500 миллисекунд
       }
-    } catch (error2) {
-      console.log(error2)
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.toJSON());
+      if (error && error.response && error.response.data.name === "TokenExpiredError") {
+        authContext?.setAuth(null);
+        romoveFromLocalStorage();
+      }
+
+      if (error.response) {
+        console.log("Ошибка", error.toJSON());
+        RedirectToLogin();
+      } else if (error.request) {
+        console.log(error.toJSON());
+      } else {
+        // Произошло что-то при настройке запроса, вызвавшее ошибку
+        console.log("Error", error.message);
+      }
     }
   };
 
