@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 
-import SocketContext from './context/socketContext'
+import { SocketProvider } from './context/socketContext'
 import { AuthProvider } from './context/authContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 
@@ -26,76 +26,52 @@ import Stats from './pages/Admin/components/stats/Stats';
 import Tasks from './pages/Admin/Moderation/Orders/ModerationOrders';
 import ModerationOrders from './pages/Admin/Moderation/Orders/ModerationOrders';
 import { Toaster } from "react-hot-toast";
-import { useAppDispatch } from './hooks/redux';
+import { useAppDispatch, useAppSelector } from './hooks/redux';
 import useOrders from './hooks/orders';
 
 import {
+  Box,
   ChakraBaseProvider,
   ColorModeProvider,
 } from '@chakra-ui/react'
 import theme from './theme';
+import AppLayout from './components/ui/Layout/AppLayout';
+import { io } from 'socket.io-client';
 
 
 
 const App: React.FC = () => {
-  const socket = null
   const dispatch = useAppDispatch();
+  const userId = useAppSelector(state => state.userSlice.user?.id)
   useOrders(dispatch)
 
   return (
     <AuthProvider>
-      <SocketContext.Provider value={socket}>
+      <SocketProvider userId={userId}>
         <BrowserRouter>
+
+
           <ThemeProvider>
-            <ChakraBaseProvider theme={theme}>
-              <ColorModeProvider
-                options={{
-                  initialColorMode: 'dark',
-                  // Изначальная тема (light или dark)
-                }}
-              >
-                <div className="App">
-                  <Toaster />
+            <Box className="App"  >
+              <Toaster />
 
-                  {/* NAVIGATION */}
-                  <NavBar></NavBar>
-
-                  <div className='container'>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/Register" element={<Register />} />
-                      <Route path="/orders" element={<PrivateRoute />}>
-                        <Route path="" element={<Orders />} />
-                        <Route path="create" element={<CreateOrder />} />
-                      </Route>
-
-                      {/* ADMINISTRATOR */}
-                      <Route path="admin" element={<AdminRoute roles={["admin", "moderator"]} />}>
-
-                        <Route path="" element={<AdminDashboard />}>
-                          {/* <Route index element={<Stats />} /> */}
-                          <Route path="moder">
-                            <Route path="orders" element={<ModerationOrders />} />
-                          </Route>
-                        </Route>
+              {/* NAVIGATION */}
 
 
-                      </Route>
+              <div className='container'>
+                <AppLayout>
 
-                      {/* 404  */}
+                </AppLayout>
 
-                      <Route path="*" element={<PageNotFound />} />
-                    </Routes>
-                  </div >
-                </div>
-              </ColorModeProvider>
-            </ChakraBaseProvider>
+              </div >
+            </Box>
           </ThemeProvider>
+
+
 
         </BrowserRouter>
 
-      </SocketContext.Provider>
+      </SocketProvider>
 
     </AuthProvider>
 
