@@ -38,6 +38,9 @@ const notificationSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
+    addNotification: (state, action: PayloadAction<INotification>) => {
+      state.notifications.unshift(action.payload);
+    },
     markAsRead: (state, action: PayloadAction<number>) => {
       // Assuming your Notification has an 'id' field
       const notification = state.notifications.find(
@@ -73,5 +76,5 @@ export const selectNotificationsLoading = (state: RootState) =>
 export const selectError = (state: RootState) => state.notificationSlice.error;
 
 // Export actions and reducer
-export const { markAsRead } = notificationSlice.actions;
+export const { markAsRead, addNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;
