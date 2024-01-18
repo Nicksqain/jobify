@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Order, PrismaClient } from "@prisma/client";
 import { getUserIdByRequest } from "../helpers/auth";
+import { MyIo } from "socket";
 const prisma = new PrismaClient();
 
 enum OrderStatus {
@@ -139,7 +140,11 @@ export const getOrders = async (req: Request, res: Response) => {
 };
 
 // Изменение статуса заказа
-export const updateOrderStatus = async (req: Request, res: Response) => {
+export const updateOrderStatus = async (
+  req: Request,
+  res: Response,
+  io: MyIo
+) => {
   try {
     // Получение данных заказа
     const { orderId } = req.params;
@@ -178,6 +183,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
           },
         },
       });
+      io.to(userId as string).emit("notification", notification);
     }
 
     return res.status(200).json({ message: "Статус заказа успешно обновлен." });
