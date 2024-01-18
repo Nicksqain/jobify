@@ -18,7 +18,6 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children, userId }) =>
             newSocket.emit("joinRoom", userId);
             setSocket(newSocket);
 
-
             newSocket.on("notification", (data) => {
                   dispatch(addNotification(data));
             });
