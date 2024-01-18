@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/auth", authRoutes);
 
 app.use("/notifications", notificationsRoutes);
-app.use("/orders", ordersRoutes);
+app.use("/orders", ordersRoutes(io));
 app.use("/stats", statsRoutes);
 
 app.get("/", (req: Request, res: Response) => {
