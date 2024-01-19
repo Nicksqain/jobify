@@ -3,22 +3,19 @@ import { globalStyles } from "./styles";
 import { darkColors, lightColors } from "./colors";
 const theme = extendTheme({
   config: {
-    initialColorMode: "light",
-    useSystemColorMode: false,
+    initialColorMode: "dark",
+    useSystemColorMode: true,
   },
   colors: {
     light: lightColors,
     dark: darkColors,
   },
   styles: globalStyles,
-  components: {
-    Text: {
-      baseStyle: ({ colorMode }: StyleFunctionProps) => ({
-        bg: colorMode === "dark" ? "green.300" : "green.500",
-        color: colorMode === "dark" ? "gray.800" : "white",
-      }),
-    },
+  fonts: {
+    heading: `'Montserrat', sans-serif`,
+    body: `'Montserrat', sans-serif`,
   },
+  components: {},
 });
 
 export default theme;
