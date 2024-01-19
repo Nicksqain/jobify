@@ -61,10 +61,18 @@ model Notification {
   message   String?
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+  reason    String?
 
+  // Объект, который подвергается действию (например, "кошелек" или "заказ") Обычно это id
+  object  String?
+  // Субъект, который выполнил действие (например, "пригласил", "изменил" и т. д.)  Обычно это id
+  subject String?
+
+  source SourceList?        @default(system)
+  type   NotificationTypes? @default(normal)
   // Отношение к пользователю
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User               @relation(fields: [userId], references: [id])
 }
 
 enum PlaceOfService {
@@ -81,4 +89,15 @@ enum OrderStatus {
   completed
   cancelled
   rejected
+}
+
+enum SourceList {
+  system
+  moderation
+  user
+}
+
+enum NotificationTypes {
+  normal
+  task_rejected
 }
