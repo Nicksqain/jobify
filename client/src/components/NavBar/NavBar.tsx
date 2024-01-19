@@ -5,21 +5,13 @@ import MyNavBar from '../forms/NavBar/NavBar';
 
 import { useTheme } from '../../context/ThemeContext';
 import Select from '../ui/Select/Select';
-import Dropdown from '../ui/Dropdown';
 import {
-      ChakraProvider,
-      Box,
-      Flex,
-      Spacer,
       VStack,
-      HStack,
-      Text,
       Menu,
       MenuButton,
       MenuList,
       MenuItem,
       IconButton,
-      Button,
       useColorMode,
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
@@ -33,7 +25,7 @@ function NotificationMenu() {
       const hasUnreadNotifications = notifications.some(notification => !notification.isRead);
       console.log(notifications)
       return (
-            <Menu >
+            <Menu>
                   <MenuButton
                         as={IconButton}
                         cursor="pointer"
@@ -75,7 +67,7 @@ function NotificationMenu() {
                   >
 
                   </MenuButton>
-                  <MenuList zIndex="1">
+                  <MenuList zIndex="1" py={0}>
                         <Notifications />
                   </MenuList>
             </Menu>
@@ -101,11 +93,43 @@ const NavBar: FC<NavBarProps> = ({ }) => {
                         <MyNavBar.Link to="orders">Orders</MyNavBar.Link>
                   </MyNavBar.Collapse>
                   <MyNavBar.Collapse end>
-                        <a onClick={toggleTheme} className='nav-link'>Theme</a>
                         <NotificationMenu />
-                        <Button onClick={toggleColorMode}>
-                              Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
-                        </Button>
+                        <IconButton onClick={toggleColorMode}
+                              aria-label='Toggle color mode'
+                              icon={
+                                    colorMode === 'light' ? <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="24"
+                                          height="24"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          className="icon icon-tabler icon-tabler-moon"
+                                          viewBox="0 0 24 24"
+                                    >
+                                          <path stroke="none" d="M0 0h24v24H0z"></path>
+                                          <path d="M12 3h.393a7.5 7.5 0 007.92 12.446A9 9 0 1112 2.992z"></path>
+                                    </svg> : <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="24"
+                                          height="24"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          className="icon icon-tabler icon-tabler-sun"
+                                          viewBox="0 0 24 24"
+                                    >
+                                          <path stroke="none" d="M0 0h24v24H0z"></path>
+                                          <circle cx="12" cy="12" r="4"></circle>
+                                          <path d="M3 12h1m8-9v1m8 8h1m-9 8v1M5.6 5.6l.7.7m12.1-.7l-.7.7m0 11.4l.7.7m-12.1-.7l-.7.7"></path>
+                                    </svg>}
+
+                        >
+                        </IconButton>
                         <Menu >
                               <MenuButton as={IconButton} cursor="pointer" icon={<svg
                                     xmlns="http://www.w3.org/2000/svg"
