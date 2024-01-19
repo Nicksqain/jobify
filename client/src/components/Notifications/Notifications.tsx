@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { fetchUserNotifications, markAsRead, selectError, selectNotifications, selectNotificationsLoading } from '../../slices/notification.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { Box, List, ListItem, Text } from '@chakra-ui/react';
-// import './notification.scss'
+import { Box, Center, Divider, Flex, HStack, Heading, List, ListItem, Spacer, Text } from '@chakra-ui/react';
+import Notification from './Notification/Notification';
 
 const Notifications = () => {
       const dispatch = useAppDispatch();
@@ -17,26 +17,27 @@ const Notifications = () => {
             }
       }, [dispatch, userId]);
 
-      const handleMarkAsRead = (notificationId: number) => {
-            dispatch(markAsRead(notificationId));
-      };
-
       return (
-            <Box px={2}>
-                  {loading && <p>Загрузка...</p>}
-                  {error && <p>Ошибка: {error}</p>}
-                  <List spacing={3}>
-                        {notifications && notifications.map((notification) => (
-                              <ListItem key={notification.id} className='notification'>
-                                    <Text className='message'>{notification.message} </Text>
-                                    {!notification.isRead && (
-                                          <button onClick={() => handleMarkAsRead(notification.id)}>
-                                                Отметить как прочитанное
-                                          </button>
-                                    )}
-                              </ListItem>
-                        ))}
-                  </List>
+            <Box p={4} maxWidth={'30em'}>
+                  {notifications !== undefined && notifications.length > 0 && (
+                        <Flex mb={3} align='baseline' gap={2} wrap={'wrap'}>
+                              <Box><Heading size={'md'}>Уведомления</Heading></Box>
+                              <Spacer />
+                              <Center color="gray.500">Отметить всё как прочитанное</Center>
+                        </Flex>
+                  )}
+
+                  {notifications !== undefined && notifications.length > 0 ? (
+                        <List spacing={3}>
+                              {notifications.map((notification, index) => (
+                                    <Fragment key={index}>
+                                          <Notification notification={notification} />
+                                          {index !== notifications.length - 1 && <Divider />}
+                                    </Fragment>
+                              ))}
+                        </List>
+                  ) :
+                        <Box>Список уведомлений пуст!</Box>}
             </Box>
 
       );
