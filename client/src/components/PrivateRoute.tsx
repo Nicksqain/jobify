@@ -46,7 +46,7 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ }) => {
       } else {
         setTimeout(() => {
           setLoading(false);
-        }, 500); // задержка в 500 миллисекунд
+        }, Number(import.meta.env.VITE_LOADING_DELAY));
       }
     } catch (error: any) {
       console.log(error);
