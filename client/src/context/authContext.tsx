@@ -85,9 +85,8 @@ const AuthProvider: FC<Props> = ({ children }: Props) => {
             let data = getFromLocalStorage("auth");
             if (data) {
                   setAuth(data);
-                  dispatch(setUser(data.user))
+                  dispatch(setUser(data.user));
             }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
       return (
             <AuthContext.Provider value={{ auth, setAuth }}>
