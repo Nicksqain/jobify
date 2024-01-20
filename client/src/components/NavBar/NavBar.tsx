@@ -16,7 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import Notifications from '../Notifications/Notifications';
-import { useAppSelector } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { logoutAction } from '../../store/actions';
 interface NavBarProps {
 
 }
@@ -78,10 +79,12 @@ const NavBar: FC<NavBarProps> = ({ }) => {
       const { theme, toggleTheme } = useTheme();
       const authContext = useContext(AuthContext)
       const isAuth: Boolean = authContext?.auth !== null && authContext?.auth !== undefined;
-      const logout = () => {
+      const dispatch = useAppDispatch()
+      const handleLogout = () => {
             console.log("logOut")
             authContext?.setAuth(null);
             romoveFromLocalStorage();
+            dispatch(logoutAction());
       };
       const { colorMode, toggleColorMode } = useColorMode()
       return (
@@ -159,7 +162,7 @@ const NavBar: FC<NavBarProps> = ({ }) => {
 
                                                             </MenuItem>
                                                             <MenuItem>
-                                                                  <MyNavBar.Link to="/login" onClick={logout}>Logout</MyNavBar.Link>
+                                                                  <MyNavBar.Link to="/login" onClick={handleLogout}>Logout</MyNavBar.Link>
                                                             </MenuItem>
                                                       </VStack>
                                                 </MenuList>
