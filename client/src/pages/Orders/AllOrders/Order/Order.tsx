@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, RefObject, useEffect, useRef, useState } from "react";
 
 import "./order.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +11,7 @@ import Prompt from "../../../../components/ui/Prompt/Prompt";
 import { isAdmin, isModerator } from "../../../../helpers/role";
 import { useUpdateOrderStatusMutation } from "../../../../mutations/orderMutations";
 import toast from "react-hot-toast";
+import { AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter, Button, useDisclosure, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react";
 
 
 interface OrderProps {
@@ -29,6 +30,12 @@ interface OrderProps {
 }
 
 const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, createdAt, servicePlace, isUserOrder = true }) => {
+
+  //  Cancel order part
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  const initialFocusRef = useRef<HTMLInputElement>(null);
+  // ------
   const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
   const [isPromptOpen, setIsPromptOpen] = useState<boolean>(false);
   const [confirmValue, setConfirmValue] = useState('');
@@ -241,15 +248,39 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
             {/* {isConfirmOpen ? <></> : (<button className="my-btn my-btn-danger" onClick={handleShowConfirm}>Cancel order</button>)}
             <Confirm isOpen={isConfirmOpen} message="Are you sure?" onConfirm={handleConfirm} onCancel={handleCancel} /> */}
             {
-              (isUserOrder || isAdmin() || isModerator()) && <><button className="my-btn my-btn-danger" onClick={handleShowPrompt}>Cancel order</button>
-                <Prompt
-                  isOpen={isPromptOpen}
-                  message="Enter something:"
-                  onConfirm={handleOrderCancelingPromptConfirm}
-                  onCancel={handlePromptCancel}
-                  inputValue={confirmValue}
-                  setInputValue={setConfirmValue}
-                /></>
+              (isUserOrder || isAdmin() || isModerator()) && <>
+                <Button colorScheme='red' onClick={onOpen}>
+                  Отменить
+                </Button>
+                <Modal
+                  initialFocusRef={initialFocusRef}
+                  finalFocusRef={initialFocusRef}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  isCentered
+                >
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Отмена задачи</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                      <FormControl>
+                        <FormLabel>Причина</FormLabel>
+                        <Input ref={initialFocusRef} placeholder='Наличие сквернословия' />
+                      </FormControl>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button onClick={onClose}>
+                        Закрыть
+                      </Button>
+                      <Button colorScheme='red' onClick={onClose} ml={3}>
+                        Отменить задачу
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+              </>
             }
           </div>
         </div>
