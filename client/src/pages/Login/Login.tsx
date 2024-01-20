@@ -7,6 +7,8 @@ import { saveInLocalStorage } from "../../helpers/auth";
 import "./login.scss"
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
+import { setUser } from '../../slices/user.slice';
+import { useAppDispatch } from '../../hooks/redux';
 interface LoginProps {
 
 }
@@ -20,7 +22,7 @@ const Login: FC<LoginProps> = ({ }) => {
       // Context
 
       const authContext = useContext(AuthContext);
-
+      const dispatch = useAppDispatch();
       // State
 
       // Hooks
@@ -53,6 +55,7 @@ const Login: FC<LoginProps> = ({ }) => {
                   }
                   else {
                         authContext?.setAuth(data);
+                        dispatch(setUser(data.user))
                         // Save in localstorage
                         saveInLocalStorage("auth", data);
                         // toast
