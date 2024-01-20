@@ -35,7 +35,7 @@ export default function useOrders(dispatch: AppDispatch) {
     isLoading: isLoadingUserOrders,
     isError: isUserOrdersError,
   } = useQuery<IOrder[]>(
-    ["userOrders"],
+    ["userOrders", user?.id],
     () => fetchAllUserOrders(user?.id ?? ""),
     {
       onSuccess: (data) => {
