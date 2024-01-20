@@ -1,13 +1,21 @@
 // store/store.ts
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { Action, combineReducers, configureStore } from "@reduxjs/toolkit";
 import { orderSlice, userSlice, notificationSlice } from "../slices";
 import socketMiddleware from "../middlewares/socketMiddleware";
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   orderSlice,
   userSlice,
   notificationSlice,
 });
+
+const rootReducer = (state: any, action: Action) => {
+  if (action.type === "USER_LOGOUT") {
+    return appReducer(undefined, action);
+  }
+
+  return appReducer(state, action);
+};
 
 export const setupStore = () => {
   return configureStore({
