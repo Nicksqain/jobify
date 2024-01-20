@@ -43,7 +43,7 @@ import { io } from 'socket.io-client';
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector(state => state.userSlice.user?.id)
-  useOrders(dispatch)
+  // useOrders(dispatch)
 
   return (
     <AuthProvider>
