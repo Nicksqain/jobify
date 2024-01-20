@@ -1,7 +1,7 @@
 import { ThreeDots } from "react-loader-spinner";
 import { FC } from "react";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import "./button.scss";
+// import "./button.scss";
 interface ButtonProps {
   handleSubmit?: React.MouseEventHandler<HTMLButtonElement>;
   handleClick?: React.MouseEventHandler<HTMLButtonElement>;
