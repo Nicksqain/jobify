@@ -24,3 +24,20 @@ export const getNotifications = async (req: Request, res: Response) => {
     return res.status(400).send("Уведомлений не найдено!");
   }
 };
+
+export const markAsRead = async (req: Request, res: Response) => {
+  const notificationId = Number(req.params.notificationId);
+  try {
+    await prisma.notification.update({
+      where: { id: notificationId },
+      data: {
+        isRead: true,
+      },
+    });
+    return res.json({ success: true });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, error: "Не удалось выполнить запрос!" });
+  }
+};
