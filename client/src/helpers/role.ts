@@ -1,14 +1,9 @@
-import { useAppSelector } from "../hooks/redux";
+import { IUser } from "../models/IUser";
 
-export const isAdmin = () => {
-  const { user } = useAppSelector((state) => state.userSlice);
-  if (user?.role == "admin") {
-    return true;
-  } else return false;
+export const isAdmin = (user: IUser | null | undefined) => {
+  return user?.role === "admin";
 };
-export const isModerator = () => {
-  const { user } = useAppSelector((state) => state.userSlice);
-  if (user?.role == "moderator") {
-    return true;
-  } else return false;
+
+export const isModerator = (user: IUser | null | undefined) => {
+  return user?.role === "moderator";
 };
