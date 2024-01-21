@@ -95,10 +95,10 @@ a:hover {
   transform: translateY(-2px);
   box-shadow: 0 20px 80px -10px #73f190;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+// button:focus,
+// button:focus-visible {
+//   outline: 4px auto -webkit-focus-ring-color;
+// }
 .danger-btn {
   background-color: var(--danger-background-color);
   color: var(--white);
