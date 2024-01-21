@@ -2,18 +2,19 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { INotification } from "../models/INotifiCation";
 import { RootState } from "../store/store";
 import { fetchAllUserNotifications } from "../api/fetchData";
+import { markNotificationAsRead } from "../api/notificationApi";
 
 interface NotificationState {
   notifications: INotification[];
   loading: boolean;
-  error: string | null;
+  error: string | undefined;
 }
 
 // Initial state
 const initialState: NotificationState = {
   notifications: [],
   loading: false,
-  error: null,
+  error: undefined,
 };
 
 // Define an async thunk for fetching notifications
@@ -33,6 +34,14 @@ export const fetchUserNotifications = createAsyncThunk(
   }
 );
 
+export const markAsReadAsync = createAsyncThunk(
+  "notifications/markAsRead",
+  async (notificationId: number) => {
+    await markNotificationAsRead(notificationId);
+    return notificationId;
+  }
+);
+
 // Create a slice
 const notificationSlice = createSlice({
   name: "notifications",
@@ -41,21 +50,12 @@ const notificationSlice = createSlice({
     addNotification: (state, action: PayloadAction<INotification>) => {
       state.notifications.unshift(action.payload);
     },
-    markAsRead: (state, action: PayloadAction<number>) => {
-      // Assuming your Notification has an 'id' field
-      const notification = state.notifications.find(
-        (n) => n.id === action.payload
-      );
-      if (notification) {
-        notification.isRead = true;
-      }
-    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserNotifications.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = undefined;
       })
       .addCase(fetchUserNotifications.fulfilled, (state, action) => {
         state.loading = false;
@@ -64,6 +64,24 @@ const notificationSlice = createSlice({
       .addCase(fetchUserNotifications.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message as string;
+      })
+      // MarkAsReadAsync
+      .addCase(markAsReadAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(markAsReadAsync.fulfilled, (state, action) => {
+        const notificationId = action.payload;
+        const notification = state.notifications.find(
+          (n) => n.id === notificationId
+        );
+        if (notification) {
+          notification.isRead = true;
+        }
+        state.loading = false;
+      })
+      .addCase(markAsReadAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
@@ -76,5 +94,5 @@ export const selectNotificationsLoading = (state: RootState) =>
 export const selectError = (state: RootState) => state.notificationSlice.error;
 
 // Export actions and reducer
-export const { markAsRead, addNotification } = notificationSlice.actions;
+export const { addNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;

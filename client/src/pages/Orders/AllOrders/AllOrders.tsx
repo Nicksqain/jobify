@@ -30,7 +30,7 @@ const AllOrders = () => {
                   {allOrders.data && allOrders.data.map((el: IOrder, index) => (
                         <Order
                               id={el.id}
-                              isUserOrder={user?.id == el.userId ? true : false}
+                              isUserOrder={user?.id === el.userId}
                               key={index}
                               title={el.orderName}
                               status={el.status}
