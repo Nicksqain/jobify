@@ -160,7 +160,7 @@ export const updateOrderStatus = async (
       where: { id: parseInt(orderId, 10) },
       data: {
         status,
-        moderationComment: moderationComment,
+        updatedAt: new Date(),
       },
     });
 
@@ -171,13 +171,16 @@ export const updateOrderStatus = async (
     });
 
     const userId = order?.userId;
-    console.log(userId);
     // Создание уведомления
 
     if (reason) {
       const notification = await prisma.notification.create({
         data: {
           message: `Ваш статус заказа был изменен на ${status}, по причине: ${reason}`,
+          reason,
+          object: orderId,
+          source: moderationComment ? "moderation" : null,
+          type: "task_rejected",
           user: {
             connect: { id: userId },
           },
