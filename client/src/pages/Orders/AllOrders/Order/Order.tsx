@@ -110,91 +110,88 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
       toast.error('Ошибка при обновлении статуса задачи')
     }
   };
-  if (role === "orderer") {
-    return (
-      <div className="order">
-        <div className="order-header">
-          <div className="top">
-            <div className="left">
-              <div className="order-title">{title}</div>
-              <div className="views">
-                <FontAwesomeIcon icon={faEye} /> <span>135</span>
-              </div>
-            </div>
-            <div className="right">
-              <div className="price-range">{parseBudget()} KZT</div>
+  return (
+    <div className="order">
+      <div className="order-header">
+        <div className="top">
+          <div className="left">
+            <div className="order-title">{title}</div>
+            <div className="views">
+              <FontAwesomeIcon icon={faEye} /> <span>135</span>
             </div>
           </div>
-          <div className="bottom">
-            <div className="creation-date">Создано {createdAt}</div>
+          <div className="right">
+            <div className="price-range">{parseBudget()} KZT</div>
           </div>
         </div>
-        <div className="order-details">
-          <Tabs>
-            <Tab title="Order details">
-              <TaskDetails servicePlace={servicePlace} author={author} description={description} />
-            </Tab>
-
-            {
-              isUserOrder ? (<Tab title="Responses">
-                <TaskResponses />
-              </Tab>) : (<></>)
-            }
-
-          </Tabs>
-          <div className="dflex justify-content-end">
-            {/* {isConfirmOpen ? <></> : (<button className="my-btn my-btn-danger" onClick={handleShowConfirm}>Cancel order</button>)}
-            <Confirm isOpen={isConfirmOpen} message="Are you sure?" onConfirm={handleConfirm} onCancel={handleCancel} /> */}
-            {
-              (isUserOrder || isAdmin(user) || isModerator(user)) && <>
-                <Button colorScheme='red' onClick={onOpen}>
-                  Отменить
-                </Button>
-                <Modal
-                  initialFocusRef={initialFocusRef}
-                  finalFocusRef={initialFocusRef}
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  isCentered
-                >
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Отмена задачи</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                      {
-                        isAdmin(user) || isModerator(user) ?
-                          <FormControl isRequired isInvalid={setIsReasonValid}>
-                            <FormLabel>Причина</FormLabel>
-                            <Input ref={initialFocusRef} placeholder='Наличие сквернословия' onChange={handleReasonChange} />
-                            {
-                              !isReasonValid && <FormErrorMessage>Обязательно введите причину.</FormErrorMessage>
-                            }
-
-                          </FormControl>
-                          :
-                          <>Вы уверены, что хотите отклонить свою задачу?</>
-                      }
-                    </ModalBody>
-
-                    <ModalFooter>
-                      <Button onClick={onClose}>
-                        Закрыть
-                      </Button>
-                      <Button colorScheme='red' onClick={isAdmin(user) || isModerator(user) ? handleCloseByModer : handleCloseByUser} ml={3}>
-                        Отменить задачу
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
-              </>
-            }
-          </div>
+        <div className="bottom">
+          <div className="creation-date">Создано {createdAt}</div>
         </div>
       </div>
-    );
-  }
-  return null
+      <div className="order-details">
+        <Tabs>
+          <Tab title="Order details">
+            <TaskDetails servicePlace={servicePlace} author={author} description={description} />
+          </Tab>
+
+          {
+            isUserOrder ? (<Tab title="Responses">
+              <TaskResponses />
+            </Tab>) : (<></>)
+          }
+
+        </Tabs>
+        <div className="dflex justify-content-end">
+          {/* {isConfirmOpen ? <></> : (<button className="my-btn my-btn-danger" onClick={handleShowConfirm}>Cancel order</button>)}
+            <Confirm isOpen={isConfirmOpen} message="Are you sure?" onConfirm={handleConfirm} onCancel={handleCancel} /> */}
+          {
+            (isUserOrder || isAdmin(user) || isModerator(user)) && <>
+              <Button colorScheme='red' onClick={onOpen}>
+                Отменить
+              </Button>
+              <Modal
+                initialFocusRef={initialFocusRef}
+                finalFocusRef={initialFocusRef}
+                isOpen={isOpen}
+                onClose={onClose}
+                isCentered
+              >
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Отмена задачи</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody pb={6}>
+                    {
+                      isAdmin(user) || isModerator(user) ?
+                        <FormControl isRequired isInvalid={setIsReasonValid}>
+                          <FormLabel>Причина</FormLabel>
+                          <Input ref={initialFocusRef} placeholder='Наличие сквернословия' onChange={handleReasonChange} />
+                          {
+                            !isReasonValid && <FormErrorMessage>Обязательно введите причину.</FormErrorMessage>
+                          }
+
+                        </FormControl>
+                        :
+                        <>Вы уверены, что хотите отклонить свою задачу?</>
+                    }
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button onClick={onClose}>
+                      Закрыть
+                    </Button>
+                    <Button colorScheme='red' onClick={isAdmin(user) || isModerator(user) ? handleCloseByModer : handleCloseByUser} ml={3}>
+                      Отменить задачу
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </>
+          }
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Order;
