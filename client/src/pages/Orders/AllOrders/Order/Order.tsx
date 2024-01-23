@@ -12,6 +12,7 @@ import { Button, useDisclosure, FormControl, FormLabel, Input, Modal, ModalBody,
 import { useAppSelector } from "../../../../hooks/redux";
 import TaskResponses from "./TaskResponses/TaskResponses";
 import TaskDetails from "./TaskDetails/TaskDetails";
+import { parseBudget } from "../../../../helpers/tasks";
 
 
 interface OrderProps {
@@ -39,24 +40,10 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
 
   const updateOrderStatusMutation = useUpdateOrderStatusMutation();
 
-  const parseBudget = () => {
-    const minBudget = budget[0]
-    const maxBudget = budget[1]
-    const formatNumber = (number: number) => {
-      return number.toLocaleString('ru-RU'); // Используем 'en-US' для формата с разделителями на тысячи
-    };
-
-    if (minBudget == maxBudget) {
-      return formatNumber(maxBudget)
-    } else {
-      return `${formatNumber(minBudget)} - ${formatNumber(maxBudget)}`
-    }
-  }
-
   const [reason, setReason] = useState<string | null>(null);
   const [isReasonValid, setIsReasonValid] = useState<boolean | undefined>(false);
 
-  const handleReasonChange = (event) => {
+  const handleReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     setReason(inputValue);
     setIsReasonValid(inputValue !== '');
@@ -104,7 +91,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
             </div>
           </div>
           <div className="right">
-            <div className="price-range">{parseBudget()} KZT</div>
+            <div className="price-range">{parseBudget(budget[0], budget[1])} KZT</div>
           </div>
         </div>
         <div className="bottom">
@@ -118,15 +105,16 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
           </Tab>
 
           {
-            isUserOrder ? (<Tab title="Responses">
-              <TaskResponses />
-            </Tab>) : (<></>)
+            isUserOrder ?
+              <Tab title="Responses">
+                <TaskResponses />
+              </Tab>
+              :
+              <></>
           }
 
         </Tabs>
         <div className="dflex justify-content-end">
-          {/* {isConfirmOpen ? <></> : (<button className="my-btn my-btn-danger" onClick={handleShowConfirm}>Cancel order</button>)}
-            <Confirm isOpen={isConfirmOpen} message="Are you sure?" onConfirm={handleConfirm} onCancel={handleCancel} /> */}
           {
             (isUserOrder || isAdmin(user) || isModerator(user)) && <>
               <Button colorScheme='red' onClick={onOpen}>
@@ -146,7 +134,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
                   <ModalBody pb={6}>
                     {
                       isAdmin(user) || isModerator(user) ?
-                        <FormControl isRequired isInvalid={setIsReasonValid}>
+                        <FormControl isRequired isInvalid={!isReasonValid}>
                           <FormLabel>Причина</FormLabel>
                           <Input ref={initialFocusRef} placeholder='Наличие сквернословия' onChange={handleReasonChange} />
                           {
