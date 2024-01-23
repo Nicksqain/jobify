@@ -1,13 +1,10 @@
-import { FC, RefObject, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 
 import "./order.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import Tab from "../../../../components/ui/Tabs/Tab";
 import Tabs from "../../../../components/ui/Tabs/Tabs";
-import Confirm from "../../../../components/ui/Confirm/Confirm";
-import Prompt from "../../../../components/ui/Prompt/Prompt";
 import { isAdmin, isModerator } from "../../../../helpers/role";
 import { useUpdateOrderStatusMutation } from "../../../../mutations/orderMutations";
 import toast from "react-hot-toast";
@@ -39,22 +36,9 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef<HTMLButtonElement>(null);
   const initialFocusRef = useRef<HTMLInputElement>(null);
-  // ------
-  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
-  const [isPromptOpen, setIsPromptOpen] = useState<boolean>(false);
-  const [confirmValue, setConfirmValue] = useState('');
 
   const updateOrderStatusMutation = useUpdateOrderStatusMutation();
 
-
-  const servicePlaces: Record<string, string> = {
-    myPlace: "У меня",
-    freelancerPlace: "У исполнителя",
-    dontMatter: "Неважно"
-  }
-  const getServicePlaceString = (place: string) => {
-    return servicePlaces[place]
-  }
   const parseBudget = () => {
     const minBudget = budget[0]
     const maxBudget = budget[1]
@@ -75,7 +59,6 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
   const handleReasonChange = (event) => {
     const inputValue = event.target.value;
     setReason(inputValue);
-
     setIsReasonValid(inputValue !== '');
   };
 
