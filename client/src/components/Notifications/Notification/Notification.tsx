@@ -4,6 +4,7 @@ import { INotification } from '../../../models/INotifiCation';
 import { useAppDispatch } from '../../../hooks/redux';
 import { markAsReadAsync } from '../../../slices/notification.slice';
 import ModerationIcon from '../../../assets/icons/ModerationIcon';
+import dayjs from 'dayjs';
 
 interface VariantedNotificationProps extends INotification {
 
@@ -26,7 +27,9 @@ const VariantedNotification: FC<VariantedNotificationProps> = ({ id, message, is
                                           <Box>
                                                 <Heading size='sm' mb={1}>Отклоненная задача</Heading>
                                                 <Text>Ваша задача <Text as={'b'}>{object}</Text> не прошла модерацию по причине: <Text as={'b'}>{reason}</Text></Text>
+                                                <Box textAlign="right">{dayjs(createdAt).format('DD MMM в HH:mm')}</Box>
                                           </Box>
+
                                     </Flex>
                                     {!isRead && (
 
@@ -64,8 +67,11 @@ const VariantedNotification: FC<VariantedNotificationProps> = ({ id, message, is
                                     <Flex flex='1' gap='4' alignItems='center'>
                                           <Avatar size='md' iconLabel='check' p={2} icon={<ModerationIcon />} />
                                           <Box>
+
                                                 {message && <Text className='message'>{message}</Text>}
+                                                {/* <Box textAlign="right">{dayjs(createdAt).format('DD MMM в HH:mm')}</Box> */}
                                           </Box>
+
                                     </Flex>
                                     {!isRead && (
                                           <IconButton
