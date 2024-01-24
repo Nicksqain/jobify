@@ -8,7 +8,7 @@ import Tabs from "../../../../components/ui/Tabs/Tabs";
 import { isAdmin, isModerator } from "../../../../helpers/role";
 import { useUpdateOrderStatusMutation } from "../../../../mutations/orderMutations";
 import toast from "react-hot-toast";
-import { Button, useDisclosure, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormErrorMessage } from "@chakra-ui/react";
+import { Text, Button, useDisclosure, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormErrorMessage } from "@chakra-ui/react";
 import { useAppSelector } from "../../../../hooks/redux";
 import TaskResponses from "./TaskResponses/TaskResponses";
 import TaskDetails from "./TaskDetails/TaskDetails";
@@ -49,7 +49,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
     setIsReasonValid(inputValue !== '');
   };
 
-  const handleCloseByModer = async () => {
+  const handleTaskRejectByModer = async () => {
     if (isReasonValid) {
       try {
         const orderId = id;
@@ -68,7 +68,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
     }
   };
 
-  const handleCloseByUser = async () => {
+  const handleTaskRejectByUser = async () => {
     try {
       const orderId = id;
       const status = 'rejected';
@@ -115,25 +115,45 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
 
         </Tabs>
         <div className="dflex justify-content-end">
-          {
-            (isUserOrder || isAdmin(user) || isModerator(user)) && <>
-              <Button colorScheme='red' onClick={onOpen}>
-                Отменить
+          <>
+            {isUserOrder ? <Button colorScheme='red' onClick={onOpen}>
+              Отменить
+            </Button> :
+              <Button colorScheme='green' onClick={onOpen}>
+                Взять в работу
               </Button>
-              <Modal
-                initialFocusRef={initialFocusRef}
-                finalFocusRef={initialFocusRef}
-                isOpen={isOpen}
-                onClose={onClose}
-                isCentered
-              >
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader>Отмена задачи</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody pb={6}>
-                    {
-                      isAdmin(user) || isModerator(user) ?
+            }
+
+
+            <Modal
+              initialFocusRef={initialFocusRef}
+              finalFocusRef={initialFocusRef}
+              isOpen={isOpen}
+              onClose={onClose}
+              isCentered
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>{isUserOrder ? <>Отмена задачи</> : "Отклик на задачу"} </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                  {
+                    // Отмена задачи Модератором / Администратором
+                    isAdmin(user) || isModerator(user) &&
+                    <FormControl isRequired isInvalid={!isReasonValid}>
+                      <FormLabel>Причина</FormLabel>
+                      <Input ref={initialFocusRef} placeholder='Наличие сквернословия' onChange={handleReasonChange} />
+                      {
+                        !isReasonValid && <FormErrorMessage>Обязательно введите причину.</FormErrorMessage>
+                      }
+
+                    </FormControl>
+                  }
+                  {
+                    // Отмена задачи юзером
+                    isUserOrder ? <Text>Вы уверены, что хотите отклонить свою задачу?</Text> :
+                      // Отклик на задачу
+                      <>
                         <FormControl isRequired isInvalid={!isReasonValid}>
                           <FormLabel>Причина</FormLabel>
                           <Input ref={initialFocusRef} placeholder='Наличие сквернословия' onChange={handleReasonChange} />
@@ -142,23 +162,26 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
                           }
 
                         </FormControl>
-                        :
-                        <>Вы уверены, что хотите отклонить свою задачу?</>
-                    }
-                  </ModalBody>
+                      </>
+                  }
+                </ModalBody>
 
-                  <ModalFooter>
-                    <Button onClick={onClose}>
-                      Закрыть
-                    </Button>
-                    <Button colorScheme='red' onClick={isAdmin(user) || isModerator(user) ? handleCloseByModer : handleCloseByUser} ml={3}>
+                <ModalFooter>
+                  <Button onClick={onClose}>
+                    Закрыть
+                  </Button>
+                  {isUserOrder || isAdmin(user) || isModerator(user) ?
+                    <Button colorScheme='red' onClick={isAdmin(user) || isModerator(user) ? handleTaskRejectByModer : handleTaskRejectByUser} ml={3}>
                       Отменить задачу
+                    </Button> :
+                    <Button colorScheme='green' onClick={isAdmin(user) || isModerator(user) ? handleTaskRejectByModer : handleTaskRejectByUser} ml={3}>
+                      Откликнуться
                     </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
-            </>
-          }
+                  }
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </>
         </div>
       </div>
     </div>
