@@ -148,7 +148,7 @@ export const updateOrderStatus = async (
   try {
     // Получение данных заказа
     const { orderId } = req.params;
-    const { status, reason, commentType } = req.body;
+    const { status, reason, commentType, moderatorCheckedBy } = req.body;
 
     const moderationComment = commentType === "Moder" ? reason : null;
     if (!status) {
@@ -173,7 +173,14 @@ export const updateOrderStatus = async (
     const userId = order?.userId;
     // Создание уведомления
 
-    if (reason) {
+    if (reason && commentType === "Moder") {
+      await prisma.order.update({
+        where: { id: parseInt(orderId, 10) },
+        data: {
+          moderationComment: reason,
+          moderatorCheckedBy,
+        },
+      });
       const notification = await prisma.notification.create({
         data: {
           message: `Ваш статус заказа был изменен на ${status}, по причине: ${reason}`,
