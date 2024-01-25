@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import Tab from "../../../../components/ui/Tabs/Tab";
 import Tabs from "../../../../components/ui/Tabs/Tabs";
-import { isAdmin, isModerator } from "../../../../helpers/role";
+import { isAdmin, isFreelancer, isModerator } from "../../../../helpers/role";
 import { useUpdateOrderStatusMutation } from "../../../../mutations/orderMutations";
 import toast from "react-hot-toast";
 import { Text, Button, useDisclosure, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormErrorMessage } from "@chakra-ui/react";
@@ -55,7 +55,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
         const orderId = id;
         const status = 'rejected';
         const commentType = "Moder";
-        const response = await updateOrderStatusMutation.mutateAsync({ orderId, status, reason, commentType });
+        const response = await updateOrderStatusMutation.mutateAsync({ orderId, status, reason, commentType, moderatorCheckedBy: user?.id });
         if (response) {
           onClose();
           setReason('')
@@ -116,12 +116,12 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
         </Tabs>
         <div className="dflex justify-content-end">
           <>
-            {isUserOrder ? <Button colorScheme='red' onClick={onOpen}>
+            {isUserOrder || isAdmin(user) || isModerator(user) ? <Button colorScheme='red' onClick={onOpen}>
               Отменить
-            </Button> :
-              <Button colorScheme='green' onClick={onOpen}>
-                Взять в работу
-              </Button>
+            </Button> : isFreelancer(user) &&
+            <Button colorScheme='green' onClick={onOpen}>
+              Взять в работу
+            </Button>
             }
 
 
@@ -134,7 +134,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
             >
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>{isUserOrder ? <>Отмена задачи</> : "Отклик на задачу"} </ModalHeader>
+                <ModalHeader>{isUserOrder || isAdmin(user) || isModerator(user) ? <>Отмена задачи</> : "Отклик на задачу"} </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody pb={6}>
                   {
