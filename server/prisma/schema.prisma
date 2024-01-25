@@ -46,6 +46,7 @@ model Order {
   createdAt             DateTime?      @default(now())
   updatedAt             DateTime?      @default(now())
   moderationComment     String?        @db.VarChar(1000) // Поле для комментария модератора к отклоненному заказу
+  moderatorCheckedBy    String?
   status                OrderStatus?   @default(pending_approval) // Поле для статуса заказа (например, "в обработке", "выполнен")
   startExecutionDate    DateTime? // Поле для даты старта выполнения заказа
   completionDate        DateTime? // Поле для даты выполнения заказа
