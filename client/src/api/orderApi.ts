@@ -2,7 +2,12 @@ import api from ".";
 
 export const updateOrderStatus = async (
   orderId: number,
-  data: { status: string; reason?: string | null; commentType?: string | null }
+  data: {
+    status: string;
+    reason?: string | null;
+    commentType?: string | null;
+    moderatorCheckedBy?: string | null;
+  }
 ) => {
   try {
     const response = await api.patch(`/orders/${orderId}/status`, data);
