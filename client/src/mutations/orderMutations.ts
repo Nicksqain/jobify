@@ -11,11 +11,13 @@ export const useUpdateOrderStatusMutation = () => {
       status: string;
       reason?: string | null;
       commentType?: string | null;
+      moderatorCheckedBy?: string | null;
     }) =>
       updateOrderStatus(data.orderId, {
         status: data.status,
         reason: data.reason,
         commentType: data.commentType,
+        moderatorCheckedBy: data.moderatorCheckedBy,
       }),
     {
       onSuccess: () => {
