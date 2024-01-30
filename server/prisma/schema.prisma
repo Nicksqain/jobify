@@ -21,6 +21,7 @@ model User {
   status       Status         @default(freelancer)
   orders       Order[]
   Notification Notification[]
+  TaskResponse TaskResponse[]
 }
 
 enum Role {
@@ -53,8 +54,9 @@ model Order {
   plannedCompletionDate DateTime? // Поле для планируемой даты выполнения заказа
 
   // Определение отношения многие-к-одному с пользователем
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  TaskResponse TaskResponse[]
 }
 
 model Notification {
@@ -74,6 +76,22 @@ model Notification {
   // Отношение к пользователю
   userId String
   user   User               @relation(fields: [userId], references: [id])
+}
+
+model TaskResponse {
+  id            Int      @id @default(autoincrement())
+  executionCost Int // Стоимость выполнения задачи
+  executionDate DateTime // Планируемая дата выполнения задачи
+  message       String   @db.VarChar(1000)
+  createdAt     DateTime @default(now())
+  accepted      Boolean  @default(false)
+  // Определение отношения многие-к-одному с заказом
+  orderId       Int
+  order         Order    @relation(fields: [orderId], references: [id])
+
+  // Определение отношения многие-к-одному с пользователем
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 enum PlaceOfService {
