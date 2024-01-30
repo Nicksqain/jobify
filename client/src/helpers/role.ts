@@ -15,3 +15,11 @@ export const isFreelancer = (user: IUser | null | undefined) => {
 export const isOrderer = (user: IUser | null | undefined) => {
   return user?.status === "orderer";
 };
+
+export const getUserStatus = (user: IUser | null | undefined) => {
+  const statusDictionary: Record<string, string> = {
+    orderer: "Заказчик",
+    freelancer: "Исполнитель",
+  };
+  if (user && user.status) return statusDictionary[user?.status];
+};
