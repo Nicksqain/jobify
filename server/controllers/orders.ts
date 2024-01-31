@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Order, PrismaClient } from "@prisma/client";
+import { Order, PrismaClient, TaskResponse } from "@prisma/client";
 import { getUserIdByRequest } from "../helpers/auth";
 import { MyIo } from "socket";
 const prisma = new PrismaClient();
@@ -95,23 +95,68 @@ export const createOrder = async (req: Request, res: Response) => {
     return res.status(400).send({ error: err });
   }
 };
+export const createTaskResponse = async (req: Request, res: Response) => {
+  console.log("HIT create task response");
+  try {
+    const freelancerId = await getUserIdByRequest(req);
+    const { orderId } = req.params;
+    const { executionCost, executionDate, message } = req.body;
+
+    const taskResponse = await prisma.taskResponse.create({
+      data: {
+        order: { connect: { id: Number(orderId) } },
+        user: { connect: { id: freelancerId } },
+        executionCost,
+        executionDate,
+        message,
+      },
+    });
+    return res.json({ data: taskResponse, ok: true });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({ error: err, ok: false });
+  }
+};
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const { status } = req.query;
-    const orders = await prisma.order.findMany({
-      where: { status: (status as OrderStatus) ?? "published" },
-      include: {
-        user: {
-          select: {
-            fullname: true,
+    const { status, completedBy } = req.query;
+    let orders;
+    if (completedBy) {
+      orders = await prisma.order.findMany({
+        where: {
+          status: (status as OrderStatus) ?? "published",
+          TaskCompletion: {
+            userId: completedBy.toString(),
           },
         },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+        include: {
+          TaskCompletion: true,
+          user: {
+            select: {
+              fullname: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else {
+      orders = await prisma.order.findMany({
+        where: { status: (status as OrderStatus) ?? "published" },
+        include: {
+          user: {
+            select: {
+              fullname: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
     return res.json(orders);
   } catch (error) {
     return res.status(400).send("Заказов не найдено!");
@@ -119,22 +164,46 @@ export const getAllOrders = async (req: Request, res: Response) => {
 };
 export const getOrders = async (req: Request, res: Response) => {
   const userId = req.params.userId;
+  const { completedBy } = req.query;
   try {
-    const orders = await prisma.order.findMany({
-      where: { userId: userId },
-      include: {
-        user: {
-          select: {
-            fullname: true,
+    let orders;
+    if (completedBy) {
+      orders = await prisma.order.findMany({
+        where: {
+          TaskCompletion: {
+            userId: completedBy.toString(),
           },
         },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+        include: {
+          TaskCompletion: true,
+          user: {
+            select: {
+              fullname: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else {
+      orders = await prisma.order.findMany({
+        where: { userId: userId },
+        include: {
+          user: {
+            select: {
+              fullname: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
     return res.json(orders);
   } catch (error) {
+    console.log(error);
     return res.status(400).send("Заказов не найдено!");
   }
 };
