@@ -19,6 +19,7 @@ export default function createOrdersRouter(io: MyIo) {
   router.get("/", orderController.getAllOrders);
   router.get("/:userId", orderController.getOrders);
   router.post("/", orderController.createOrder);
+  router.post("/:orderId/response", orderController.createTaskResponse);
   router.patch("/:orderId/status", (req: Request, res: Response) => {
     orderController.updateOrderStatus(req, res, io);
   });
