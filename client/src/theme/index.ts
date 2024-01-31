@@ -1,6 +1,7 @@
 import { StyleFunctionProps, extendTheme } from "@chakra-ui/react";
 import { globalStyles } from "./styles";
 import { darkColors, lightColors } from "./colors";
+import { cardTheme } from "./components/card";
 const theme = extendTheme({
   config: {
     initialColorMode: "dark",
@@ -15,7 +16,9 @@ const theme = extendTheme({
     heading: `'Montserrat', sans-serif`,
     body: `'Montserrat', sans-serif`,
   },
-  components: {},
+  components: {
+    Card: cardTheme,
+  },
 });
 
 export default theme;
