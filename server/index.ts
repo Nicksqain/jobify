@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth";
 import ordersRoutes from "./routes/orders";
 import statsRoutes from "./routes/stats";
 import notificationsRoutes from "./routes/notifications";
+import usersRoutes from "./routes/users";
 import morgan from "morgan";
 import initSocket from "./socket";
 var bodyParser = require("body-parser");
@@ -50,6 +51,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/auth", authRoutes);
 
 app.use("/notifications", notificationsRoutes);
+app.use("/users", usersRoutes);
 app.use("/orders", ordersRoutes(io));
 app.use("/stats", statsRoutes);
 
