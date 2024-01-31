@@ -13,15 +13,17 @@ datasource db {
 }
 
 model User {
-  id           String         @id @unique @default(uuid())
-  fullname     String
-  email        String         @unique
-  password     String
-  role         Role           @default(user)
-  status       Status         @default(freelancer)
-  orders       Order[]
-  Notification Notification[]
-  TaskResponse TaskResponse[]
+  id             String          @id @unique @default(uuid())
+  fullname       String
+  email          String          @unique
+  password       String
+  createdAt      DateTime?       @default(now())
+  role           Role            @default(user)
+  status         Status          @default(freelancer)
+  orders         Order[]
+  Notification   Notification[]
+  TaskResponse   TaskResponse[]
+  TaskCompletion TaskCompletion?
 }
 
 enum Role {
@@ -54,9 +56,10 @@ model Order {
   plannedCompletionDate DateTime? // Поле для планируемой даты выполнения заказа
 
   // Определение отношения многие-к-одному с пользователем
-  userId       String
-  user         User           @relation(fields: [userId], references: [id])
-  TaskResponse TaskResponse[]
+  userId         String
+  user           User            @relation(fields: [userId], references: [id])
+  TaskResponse   TaskResponse[]
+  TaskCompletion TaskCompletion?
 }
 
 model Notification {
@@ -92,6 +95,15 @@ model TaskResponse {
   // Определение отношения многие-к-одному с пользователем
   userId String
   user   User   @relation(fields: [userId], references: [id])
+}
+
+model TaskCompletion {
+  id             Int       @id @default(autoincrement())
+  taskId         Int       @unique
+  task           Order     @relation(fields: [taskId], references: [id])
+  completionDate DateTime?
+  userId         String    @unique
+  user           User      @relation(fields: [userId], references: [id])
 }
 
 enum PlaceOfService {
