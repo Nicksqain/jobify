@@ -13,17 +13,17 @@ datasource db {
 }
 
 model User {
-  id             String          @id @unique @default(uuid())
+  id             String           @id @unique @default(uuid())
   fullname       String
-  email          String          @unique
+  email          String           @unique
   password       String
-  createdAt      DateTime?       @default(now())
-  role           Role            @default(user)
-  status         Status          @default(freelancer)
-  orders         Order[]
+  createdAt      DateTime?        @default(now())
+  role           Role             @default(user)
+  status         Status           @default(freelancer)
+  orders         Order[]          @relation("OrderCreator")
   Notification   Notification[]
   TaskResponse   TaskResponse[]
-  TaskCompletion TaskCompletion?
+  TaskAssignment TaskAssignment[]
 }
 
 enum Role {
@@ -57,9 +57,9 @@ model Order {
 
   // Определение отношения многие-к-одному с пользователем
   userId         String
-  user           User            @relation(fields: [userId], references: [id])
+  user           User            @relation(name: "OrderCreator", fields: [userId], references: [id])
   TaskResponse   TaskResponse[]
-  TaskCompletion TaskCompletion?
+  taskAssignment TaskAssignment? // Отношение для назначения задачи исполнителю
 }
 
 model Notification {
@@ -91,19 +91,19 @@ model TaskResponse {
   // Определение отношения многие-к-одному с заказом
   orderId       Int
   order         Order    @relation(fields: [orderId], references: [id])
-
-  // Определение отношения многие-к-одному с пользователем
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  User          User?    @relation(fields: [userId], references: [id])
+  userId        String?
 }
 
-model TaskCompletion {
+// Модель текущего исполнителя
+model TaskAssignment {
   id             Int       @id @default(autoincrement())
-  taskId         Int       @unique
-  task           Order     @relation(fields: [taskId], references: [id])
-  completionDate DateTime?
-  userId         String    @unique
+  orderId        Int       @unique
+  order          Order     @relation(fields: [orderId], references: [id])
+  userId         String
   user           User      @relation(fields: [userId], references: [id])
+  startTimestamp DateTime  @default(now())
+  endTimestamp   DateTime?
 }
 
 enum PlaceOfService {
