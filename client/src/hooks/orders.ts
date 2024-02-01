@@ -6,7 +6,11 @@ import { useAppDispatch, useAppSelector } from "./redux";
 import { setAllOrders, setAllUserOrders } from "../slices/order.slice";
 import { AppDispatch } from "../store/store";
 
-export default function useOrders(dispatch: AppDispatch) {
+export default function useOrders(
+  dispatch: AppDispatch,
+  userId?: string,
+  queryCfg?: { [key: string]: any }
+) {
   // All orders
   //   load all orders from state
   const { allOrders: allOrdersFromRedux } = useAppSelector(
@@ -17,7 +21,8 @@ export default function useOrders(dispatch: AppDispatch) {
     data: allOrders,
     isLoading: isLoadingAllOrders,
     isError: isAllOrdersError,
-  } = useQuery<IOrder[]>(["orders"], () => fetchAllOrders(), {
+  } = useQuery<IOrder[]>(["orders"], () => fetchAllOrders(queryCfg), {
+    cacheTime: 0,
     onSuccess: (data) => {
       dispatch(setAllOrders(data));
     },
@@ -36,8 +41,9 @@ export default function useOrders(dispatch: AppDispatch) {
     isError: isUserOrdersError,
   } = useQuery<IOrder[]>(
     ["userOrders", user?.id],
-    () => fetchAllUserOrders(user?.id ?? ""),
+    () => fetchAllUserOrders(user?.id ?? "", queryCfg),
     {
+      cacheTime: 0,
       onSuccess: (data) => {
         dispatch(setAllUserOrders(data));
       },
