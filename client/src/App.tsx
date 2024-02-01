@@ -31,14 +31,9 @@ import useOrders from './hooks/orders';
 
 import {
   Box,
-  ChakraBaseProvider,
-  ColorModeProvider,
 } from '@chakra-ui/react'
-import theme from './theme';
+
 import AppLayout from './components/ui/Layout/AppLayout';
-import { io } from 'socket.io-client';
-
-
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
