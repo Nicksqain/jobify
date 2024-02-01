@@ -13,6 +13,9 @@ import PageNotFound from '../../../pages/PageNotFound';
 import Register from '../../../pages/Register/Register';
 import PrivateRoute from '../../PrivateRoute';
 import Orders from '../../../pages/Orders/Orders';
+import Profile from '../../../pages/User/Profile/Profile';
+import Projects from '../../../pages/Projects/Projects';
+import CreateProject from '../../../pages/Projects/CreateProject/CreateProject';
 
 interface AppLayoutProps {
       children?: React.ReactElement
@@ -26,9 +29,16 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/Register" element={<Register />} />
+                        <Route path="/user/:userId" element={<PrivateRoute />}>
+                              <Route path="" element={<Profile />} />
+                        </Route>
                         <Route path="/orders" element={<PrivateRoute />}>
                               <Route path="" element={<Orders />} />
                               <Route path="create" element={<CreateOrder />} />
+                        </Route>
+                        <Route path="/projects" element={<PrivateRoute />}>
+                              <Route path="" element={<Projects />} />
+                              <Route path="create" element={<CreateProject />} />
                         </Route>
 
                         {/* ADMINISTRATOR */}
