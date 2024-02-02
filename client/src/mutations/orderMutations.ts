@@ -1,12 +1,12 @@
 // orderMutations.ts
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateOrderStatus } from "../api/orderApi"; // замените на ваш реальный API файл
 
 export const useUpdateOrderStatusMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    (data: {
+  return useMutation({
+    mutationFn: (data: {
       orderId: number;
       status: string;
       reason?: string | null;
@@ -19,12 +19,11 @@ export const useUpdateOrderStatusMutation = () => {
         commentType: data.commentType,
         moderatorCheckedBy: data.moderatorCheckedBy,
       }),
-    {
-      onSuccess: () => {
-        // После успешного выполнения мутации можно сбросить кэш запроса,
-        // чтобы обновить данные в соответствии с изменениями
-        queryClient.invalidateQueries(["orders", "userOrders"]);
-      },
-    }
-  );
+
+    onSettled: () => {
+      // После успешного выполнения мутации можно сбросить кэш запроса,
+      // чтобы обновить данные в соответствии с изменениями
+      queryClient.invalidateQueries({ queryKey: ["orders", "userOrders"] });
+    },
+  });
 };
