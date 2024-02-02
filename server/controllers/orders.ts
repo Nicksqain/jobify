@@ -105,7 +105,7 @@ export const createTaskResponse = async (req: Request, res: Response) => {
     const taskResponse = await prisma.taskResponse.create({
       data: {
         order: { connect: { id: Number(orderId) } },
-        user: { connect: { id: freelancerId } },
+        User: { connect: { id: freelancerId } },
         executionCost,
         executionDate,
         message,
@@ -120,18 +120,37 @@ export const createTaskResponse = async (req: Request, res: Response) => {
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const { status, completedBy } = req.query;
+    const { status, completedBy, inProgressBy, createdBy } = req.query;
     let orders;
     if (completedBy) {
       orders = await prisma.order.findMany({
         where: {
-          status: (status as OrderStatus) ?? "published",
-          TaskCompletion: {
+          status: (status as OrderStatus) ?? "completed",
+          taskAssignment: {
             userId: completedBy.toString(),
+            endTimestamp: { not: null },
           },
         },
         include: {
-          TaskCompletion: true,
+          user: {
+            select: {
+              fullname: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else if (inProgressBy) {
+      orders = await prisma.order.findMany({
+        where: {
+          status: (status as OrderStatus) ?? "inprogress",
+          taskAssignment: {
+            userId: inProgressBy.toString(),
+          },
+        },
+        include: {
           user: {
             select: {
               fullname: true,
@@ -144,7 +163,10 @@ export const getAllOrders = async (req: Request, res: Response) => {
       });
     } else {
       orders = await prisma.order.findMany({
-        where: { status: (status as OrderStatus) ?? "published" },
+        where: {
+          status: (status as OrderStatus) ?? "published",
+          userId: createdBy ? { equals: createdBy.toString() } : undefined,
+        },
         include: {
           user: {
             select: {
@@ -169,13 +191,8 @@ export const getOrders = async (req: Request, res: Response) => {
     let orders;
     if (completedBy) {
       orders = await prisma.order.findMany({
-        where: {
-          TaskCompletion: {
-            userId: completedBy.toString(),
-          },
-        },
+        where: {},
         include: {
-          TaskCompletion: true,
           user: {
             select: {
               fullname: true,
