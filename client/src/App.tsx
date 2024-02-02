@@ -34,42 +34,46 @@ import {
 } from '@chakra-ui/react'
 
 import AppLayout from './components/ui/Layout/AppLayout';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { QueryClientProvider } from '@tanstack/react-query';
+import queryClient from './queryClient/queryClient';
 
 const App: React.FC = () => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector(state => state.userSlice.user?.id)
   // useOrders(dispatch)
-
   return (
-    <AuthProvider>
-      <SocketProvider userId={userId}>
-        <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <SocketProvider userId={userId}>
+          <BrowserRouter>
 
 
-          <ThemeProvider>
-            <Box className="App"  >
-              <Toaster />
+            <ThemeProvider>
+              <Box className="App"  >
+                <Toaster />
 
-              {/* NAVIGATION */}
-
-
-              <div className='container'>
-                <AppLayout>
-
-                </AppLayout>
-
-              </div >
-            </Box>
-          </ThemeProvider>
+                {/* NAVIGATION */}
 
 
+                <div className='container'>
+                  <AppLayout>
 
-        </BrowserRouter>
+                  </AppLayout>
 
-      </SocketProvider>
+                </div >
+              </Box>
+            </ThemeProvider>
 
-    </AuthProvider>
 
+
+          </BrowserRouter>
+
+        </SocketProvider>
+
+      </AuthProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
 
   )
 };
