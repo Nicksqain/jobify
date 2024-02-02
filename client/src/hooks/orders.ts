@@ -1,10 +1,11 @@
 // use allOrders.ts
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IOrder } from "../models/IOrder";
 import { fetchAllOrders, fetchAllUserOrders } from "../api/fetchData";
 import { useAppDispatch, useAppSelector } from "./redux";
 import { setAllOrders, setAllUserOrders } from "../slices/order.slice";
 import { AppDispatch } from "../store/store";
+import { useEffect } from "react";
 
 export default function useOrders(
   dispatch: AppDispatch,
@@ -21,13 +22,16 @@ export default function useOrders(
     data: allOrders,
     isLoading: isLoadingAllOrders,
     isError: isAllOrdersError,
-  } = useQuery<IOrder[]>(["orders"], () => fetchAllOrders(queryCfg), {
-    cacheTime: 0,
-    onSuccess: (data) => {
-      dispatch(setAllOrders(data));
-    },
+    isSuccess: isAllOrdersSuccess,
+  } = useQuery<IOrder[]>({
+    queryKey: ["orders"],
+    queryFn: () => fetchAllOrders(queryCfg),
   });
-
+  useEffect(() => {
+    if (isAllOrdersSuccess) {
+      dispatch(setAllOrders(allOrders as IOrder[]));
+    }
+  }, [isAllOrdersSuccess]);
   //   All user orders
   //   load user orders from state
   const { allUserOrders: allUserOrdersFromRedux } = useAppSelector(
@@ -39,16 +43,17 @@ export default function useOrders(
     data: orders,
     isLoading: isLoadingUserOrders,
     isError: isUserOrdersError,
-  } = useQuery<IOrder[]>(
-    ["userOrders", user?.id],
-    () => fetchAllUserOrders(user?.id ?? "", queryCfg),
-    {
-      cacheTime: 0,
-      onSuccess: (data) => {
-        dispatch(setAllUserOrders(data));
-      },
+    isSuccess: isAllUserOrdersSuccess,
+  } = useQuery<IOrder[]>({
+    queryKey: ["userOrders", user?.id],
+    queryFn: () => fetchAllUserOrders(user?.id ?? "", queryCfg),
+    staleTime: 0,
+  });
+  useEffect(() => {
+    if (isAllUserOrdersSuccess) {
+      dispatch(setAllUserOrders(orders as IOrder[]));
     }
-  );
+  }, [isAllUserOrdersSuccess]);
   return {
     allOrders: {
       data: allOrders || allOrdersFromRedux,
