@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API}`,
 });
 api.defaults.headers.common["Authorization"] =
-  getFromLocalStorage("auth").token;
+  getFromLocalStorage("auth")?.token;
 api.defaults.headers.common["ngrok-skip-browser-warning"] = "true";
 // const api = axios.create({
 //   baseURL: `${import.meta.env.VITE_APP_API}`,
