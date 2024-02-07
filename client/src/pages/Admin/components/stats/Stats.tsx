@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import './stats.scss'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import Select from '../../../../components/ui/Select/Select'
 interface StatsProps {
 
@@ -8,10 +8,12 @@ interface StatsProps {
 
 const Stats: FC<StatsProps> = ({ }) => {
       const [selectedStatsPeriod, setSelectedStatsPeriod] = useState<string>("week");
-      const { isLoading, error, data } = useQuery('repoData', () =>
-            fetch(`${import.meta.env.VITE_APP_API}/stats`).then(res =>
-                  res.json()
-            )
+      const { isLoading, error, data } = useQuery({
+            queryKey: ['repoData'], queryFn: () =>
+                  fetch(`${import.meta.env.VITE_APP_API}/stats`).then(res =>
+                        res.json()
+                  )
+      }
       )
       interface OrderStats {
             created: number;
