@@ -14,10 +14,16 @@ import {
       IconButton,
       useColorMode,
 } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Notifications from '../Notifications/Notifications';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { logoutAction } from '../../store/actions';
+import AccountIcon from '../../assets/icons/AccountIcon';
+import DashBoardIcon from '../../assets/icons/DashBoardIcon';
+import LogoutIcon from '../../assets/icons/LogoutIcon';
+import { isAdmin, isModerator } from '../../helpers/role';
+import TaskList from '../../assets/icons/TaskList';
+import ProjectList from '../../assets/icons/ProjectList';
 interface NavBarProps {
 
 }
@@ -80,6 +86,7 @@ const NavBar: FC<NavBarProps> = ({ }) => {
       const authContext = useContext(AuthContext)
       const isAuth: Boolean = authContext?.auth !== null && authContext?.auth !== undefined;
       const dispatch = useAppDispatch()
+      const { user } = useAppSelector(state => state.userSlice)
       const handleLogout = () => {
             console.log("logOut")
             authContext?.setAuth(null);
@@ -91,9 +98,9 @@ const NavBar: FC<NavBarProps> = ({ }) => {
 
             <MyNavBar.Container>
                   <MyNavBar.Brand>Jobify.</MyNavBar.Brand>
-
-                  <MyNavBar.Collapse >
-                        <MyNavBar.Link to="orders">Orders</MyNavBar.Link>
+                  <MyNavBar.Collapse>
+                        <MyNavBar.Link to="orders">Задачи</MyNavBar.Link>
+                        <MyNavBar.Link to="projects">Проекты</MyNavBar.Link>
                   </MyNavBar.Collapse>
                   <MyNavBar.Collapse end>
                         <NotificationMenu />
@@ -155,14 +162,26 @@ const NavBar: FC<NavBarProps> = ({ }) => {
                               {
                                     isAuth ?
                                           (
-                                                <MenuList zIndex="1">
+                                                <MenuList zIndex="1" p={0}>
                                                       <VStack>
-                                                            <MenuItem>
-                                                                  <MyNavBar.Link to="/admin">Admin</MyNavBar.Link>
-
+                                                            <MenuItem p={4} as={Link} to={`/user/${user?.id}`} icon={<AccountIcon />} iconSpacing={2}>
+                                                                  Мой профиль
                                                             </MenuItem>
-                                                            <MenuItem>
-                                                                  <MyNavBar.Link to="/login" onClick={handleLogout}>Logout</MyNavBar.Link>
+                                                            {(isAdmin(user) || isModerator(user)) &&
+                                                                  <MenuItem p={4} as={Link} icon={<DashBoardIcon />} iconSpacing={2} to='/admin'>
+                                                                        Админ-панель
+                                                                  </MenuItem>}
+                                                            <MenuItem p={4} as={Link} to={`/user/${user?.id}#tasks`} icon={<TaskList />} iconSpacing={2}>
+                                                                  Мои задачи
+                                                            </MenuItem>
+                                                            <MenuItem p={4} as={Link} to={`/user/${user?.id}#orders`} icon={<ProjectList />} iconSpacing={2}>
+                                                                  Мои заказы
+                                                            </MenuItem>
+                                                            <MenuItem p={4} as={Link} to={`/user/${user?.id}#projects`} icon={<ProjectList />} iconSpacing={2}>
+                                                                  Мои проекты
+                                                            </MenuItem>
+                                                            <MenuItem p={4} as={Link} icon={<LogoutIcon />} iconSpacing={2} to="/login" onClick={handleLogout}>
+                                                                  Выйти
                                                             </MenuItem>
                                                       </VStack>
                                                 </MenuList>
