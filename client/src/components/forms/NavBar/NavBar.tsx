@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../../context/authContext';
 import { romoveFromLocalStorage } from '../../../helpers/auth';
 import './navbar.scss'
-import { Box } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 interface MenuProps {
       children?: JSX.Element | string;
 }
@@ -65,7 +65,7 @@ const MyNavBar = {
             }, [props.href])
 
             return <div className='navbar-brand' ref={brandRef}>
-                  <h4>{props.children}</h4>
+                  <Heading size="md">{props.children}</Heading>
             </div>;
       },
       //
