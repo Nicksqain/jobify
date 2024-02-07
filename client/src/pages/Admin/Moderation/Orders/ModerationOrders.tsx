@@ -7,7 +7,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ruLocale from 'dayjs/locale/ru';
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import LoadingToRedirect from "../../../../components/LoadingToRedirect";
 import { AuthContext } from "../../../../context/authContext";
 import Order from "../../../Orders/AllOrders/Order/Order";
@@ -24,9 +24,11 @@ const ModerationOrders: FC<ModerationOrdersProps> = ({ }) => {
       const auth = authContext?.auth;
       const [orders, setOrders] = useState([])
 
-      const { isLoading, error, data } = useQuery('allPendingOrders', async () => {
-            const response = await axios.get(`${import.meta.env.VITE_APP_API}/orders?status=pending_approval`);
-            return response.data;
+      const { isLoading, error, data } = useQuery({
+            queryKey: ['allPendingOrders'], queryFn: async () => {
+                  const response = await axios.get(`${import.meta.env.VITE_APP_API}/orders?status=pending_approval`);
+                  return response.data;
+            }
       });
       // const { data } = await axios.get(`${import.meta.env.VITE_APP_API}/orders`)
 
@@ -44,6 +46,8 @@ const ModerationOrders: FC<ModerationOrdersProps> = ({ }) => {
                   <div className="all-orders">
                         {orders && orders.map((el: any, index) => (
                               <Order
+                                    id={el.id}
+                                    status={el.status}
                                     isUserOrder={false}
                                     key={index}
                                     title={el.orderName}
