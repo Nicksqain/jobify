@@ -7,11 +7,9 @@ import axios from "axios";
 import dayjs from "dayjs";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ruLocale from 'dayjs/locale/ru';
-import { useQuery } from "react-query";
 import LoadingToRedirect from "../../../components/LoadingToRedirect";
 import useOrders from "../../../hooks/orders";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import queryClient from "../../../queryClient/queryClient";
 import { IOrder } from "../../../models/IOrder";
 dayjs.locale(ruLocale);
 dayjs.extend(customParseFormat)
