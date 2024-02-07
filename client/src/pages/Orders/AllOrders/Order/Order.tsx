@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { ChangeEvent, FC, useRef, useState } from "react";
 
 import "./order.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,11 +8,14 @@ import Tabs from "../../../../components/ui/Tabs/Tabs";
 import { isAdmin, isFreelancer, isModerator } from "../../../../helpers/role";
 import { useUpdateOrderStatusMutation } from "../../../../mutations/orderMutations";
 import toast from "react-hot-toast";
-import { Text, Button, useDisclosure, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormErrorMessage } from "@chakra-ui/react";
+import { Text, Button, useDisclosure, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, FormErrorMessage, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Heading, Textarea, Switch, Card } from "@chakra-ui/react";
 import { useAppSelector } from "../../../../hooks/redux";
 import TaskResponses from "./TaskResponses/TaskResponses";
 import TaskDetails from "./TaskDetails/TaskDetails";
 import { parseBudget } from "../../../../helpers/tasks";
+import { SingleDatepicker } from "chakra-dayzed-datepicker";
+import { createTaskResponse } from "../../../../api/orderApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 interface OrderProps {
@@ -32,6 +35,9 @@ interface OrderProps {
 
 const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, createdAt, servicePlace, isUserOrder = true }) => {
 
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1)
+
   const { user } = useAppSelector(state => state.userSlice)
   //  Cancel order part
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -39,14 +45,22 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
   const initialFocusRef = useRef<HTMLInputElement>(null);
 
   const updateOrderStatusMutation = useUpdateOrderStatusMutation();
+  const queryClient = useQueryClient()
 
   const [reason, setReason] = useState<string | null>(null);
+  const [executionCost, setExecutionCost] = useState<string>(budget[0].toString());
+  const [executionDate, setExecutionDate] = useState<Date>(new Date());
+  const [responseMessage, setResponseMessage] = useState<string>("");
   const [isReasonValid, setIsReasonValid] = useState<boolean | undefined>(false);
 
   const handleReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     setReason(inputValue);
     setIsReasonValid(inputValue !== '');
+  };
+
+  const handleResponseChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setResponseMessage(event.target.value);
   };
 
   const handleTaskRejectByModer = async () => {
@@ -73,15 +87,34 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
       const orderId = id;
       const status = 'rejected';
       const response = await updateOrderStatusMutation.mutateAsync({ orderId, status });
+
       if (response) {
+        queryClient.invalidateQueries({ queryKey: ['profileUserOrders'], exact: true })
         onClose();
       }
     } catch (error) {
       toast.error('Ошибка при обновлении статуса задачи')
     }
   };
+
+  const handleTaskResponse = async () => {
+    try {
+      const orderId = id;
+      const response = await createTaskResponse(orderId, { executionCost: Number(executionCost), executionDate, message: responseMessage });
+      if (response) {
+        toast.success("Отклик успешно размещен!")
+        setResponseMessage("")
+        onClose();
+      }
+    } catch (error) {
+      toast.error('Ошибка при создании отклика!')
+    }
+  };
+
   return (
-    <div className="order">
+    <Card p={7} mb={5}>
+
+
       <div className="order-header">
         <div className="top">
           <div className="left">
@@ -116,15 +149,15 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
         </Tabs>
         <div className="dflex justify-content-end">
           <>
-            {isUserOrder || isAdmin(user) || isModerator(user) ? <Button colorScheme='red' onClick={onOpen}>
-              Отменить
-            </Button> : isFreelancer(user) &&
-            <Button colorScheme='green' onClick={onOpen}>
-              Взять в работу
-            </Button>
+            {isUserOrder || isAdmin(user) || isModerator(user) ?
+              <Button colorScheme='red' onClick={onOpen}>
+                Отменить
+              </Button>
+              : isFreelancer(user) &&
+              <Button colorScheme='green' onClick={onOpen}>
+                Взять в работу
+              </Button>
             }
-
-
             <Modal
               initialFocusRef={initialFocusRef}
               finalFocusRef={initialFocusRef}
@@ -134,12 +167,12 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
             >
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>{isUserOrder || isAdmin(user) || isModerator(user) ? <>Отмена задачи</> : "Отклик на задачу"} </ModalHeader>
+                <ModalHeader>{isUserOrder || isAdmin(user) || isModerator(user) ? "Отмена задачи " : "Отклик на задачу"} </ModalHeader>
                 <ModalCloseButton />
-                <ModalBody pb={6}>
+                <ModalBody pb={3}>
                   {
                     // Отмена задачи Модератором / Администратором
-                    isAdmin(user) || isModerator(user) &&
+                    (!isUserOrder && (isAdmin(user) || isModerator(user))) &&
                     <FormControl isRequired isInvalid={!isReasonValid}>
                       <FormLabel>Причина</FormLabel>
                       <Input ref={initialFocusRef} placeholder='Наличие сквернословия' onChange={handleReasonChange} />
@@ -153,14 +186,42 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
                     // Отмена задачи юзером
                     isUserOrder ? <Text>Вы уверены, что хотите отклонить свою задачу?</Text> :
                       // Отклик на задачу
-                      <>
-                        <FormControl isRequired isInvalid={!isReasonValid}>
-                          <FormLabel>Причина</FormLabel>
-                          <Input ref={initialFocusRef} placeholder='Наличие сквернословия' onChange={handleReasonChange} />
-                          {
-                            !isReasonValid && <FormErrorMessage>Обязательно введите причину.</FormErrorMessage>
-                          }
+                      isFreelancer(user) && <>
+                        <Text fontSize="xl" mb={4}>{title}</Text>
+                        <FormControl mb={3}>
+                          <FormLabel>Стоимость {servicePlace}</FormLabel>
+                          <NumberInput step={1000} defaultValue={budget[0]} min={budget[0]} max={budget[1]} onChange={setExecutionCost}>
+                            <NumberInputField />
+                            <NumberInputStepper>
+                              <NumberIncrementStepper />
+                              <NumberDecrementStepper />
+                            </NumberInputStepper>
+                          </NumberInput>
+                        </FormControl>
 
+                        <FormControl mb={3}>
+                          <FormLabel>Планируемая дата завершения</FormLabel>
+                          <SingleDatepicker
+                            configs={
+                              {
+                                dateFormat: "dd.MM.yyyy", dayNames: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"], monthNames: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"]
+                              }
+                            }
+                            minDate={new Date(yesterday)}
+                            name="date-input"
+                            date={executionDate}
+                            onDateChange={setExecutionDate}
+                          />
+                        </FormControl>
+
+                        <FormControl>
+                          <FormLabel>Сообщение заказчику</FormLabel>
+                          <Textarea
+                            onChange={handleResponseChange}
+                            placeholder='Расскажите немного о своем опыте и как вы планируете выполнить эту задачу.'
+                            size='sm'
+                            resize="none"
+                          />
                         </FormControl>
                       </>
                   }
@@ -174,7 +235,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
                     <Button colorScheme='red' onClick={isAdmin(user) || isModerator(user) ? handleTaskRejectByModer : handleTaskRejectByUser} ml={3}>
                       Отменить задачу
                     </Button> :
-                    <Button colorScheme='green' onClick={isAdmin(user) || isModerator(user) ? handleTaskRejectByModer : handleTaskRejectByUser} ml={3}>
+                    <Button colorScheme='green' onClick={isAdmin(user) || isModerator(user) ? handleTaskRejectByModer : handleTaskResponse} ml={3}>
                       Откликнуться
                     </Button>
                   }
@@ -184,7 +245,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
           </>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
