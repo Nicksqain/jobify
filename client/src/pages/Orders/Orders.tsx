@@ -6,20 +6,24 @@ import Tab from '../../components/ui/Tabs/Tab';
 import AllUserOrders from './AllOrders/AllUserOrders';
 import './orders.scss';
 import AllOrders from './AllOrders/AllOrders';
+import { Button, Heading } from '@chakra-ui/react';
+import { isAdmin, isModerator } from '../../helpers/role';
+import { useAppSelector } from '../../hooks/redux';
 interface OrdersProps {
 
 }
 
 const Orders: FC<OrdersProps> = ({ }) => {
       const [orderer, setOrderer] = useState(false);
-      // CONTEXT
-      const authContextValue = useContext(AuthContext);
-      const auth = authContextValue?.auth;
+      // RTK STORE
+      const { user } = useAppSelector(state => state.userSlice)
+
       //   STATE
       const [freelancer, setFreelancer] = useState(false);
+
       useEffect(() => {
             // CHECKING STATUS
-            switch (auth?.user?.status) {
+            switch (user?.status) {
                   case "freelancer":
                         setFreelancer(true);
                         break;
@@ -27,30 +31,39 @@ const Orders: FC<OrdersProps> = ({ }) => {
                         setOrderer(true);
                         break;
             }
-      }, [auth?.user?.status]);
+      }, [user?.status]);
+
       return (
             <div>
                   <div className="orders min-container">
-                        <div className="orders-search">
-                              {freelancer && (
-                                    <>
-                                          <span>Найти задание для выполнения заказа</span>
-                                          <button className='primary-button'>Найти задание</button>
-                                    </>
-                              )}
-                              {orderer && (
-                                    <>
-                                          <span>Создайте заказ и выберите исполнителя</span>
-                                          <NavLink to="create">
-                                                <button className='primary-button'>Создать задание</button>
-                                          </NavLink>
-                                    </>
-                              )}
-                        </div>
+
+                        {(isAdmin(user) || isModerator(user)) && (
+                              <div className="orders-search">
+                                    <span>Проверьте задачи и изучите статистику</span>
+                                    <NavLink to="/admin/moder/orders"><Button colorScheme='green'>Приступить к модерации</Button></NavLink>
+                              </div>
+                        )}
+                        {(freelancer && (!isAdmin(user) || isModerator(user))) && (
+                              <div className="orders-search">
+                                    <span>Найти задание для выполнения заказа</span>
+                                    <Button colorScheme='green'>Найти задание</Button>
+                              </div>
+                        )}
+
+
+                        {(orderer && (!isAdmin(user) || isModerator(user))) && (
+                              <div className="orders-search">
+                                    <span>Создайте заказ и выберите исполнителя</span>
+                                    <NavLink to="create">
+                                          <Button colorScheme='green'>Создать задание</Button>
+                                    </NavLink>
+                              </div>
+                        )}
+
                   </div>
-                  <h1>All orders</h1>
+                  <Heading mb={3}>Все задачи</Heading>
                   <AllOrders />
-                  <h1>All user orders</h1>
+                  <Heading mb={3}>Ваши задачи</Heading>
                   <AllUserOrders />
 
                   {/* <Tabs>
