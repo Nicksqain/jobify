@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, FC } from "react";
 
 
 import Order from "./Order/Order";
@@ -12,10 +12,13 @@ import { IOrder } from "../../../models/IOrder";
 dayjs.locale(ruLocale);
 dayjs.extend(customParseFormat)
 
-const AllUserOrders = () => {
+interface AllUserOrdersProps {
+  userId?: string
+}
+const AllUserOrders: FC<AllUserOrdersProps> = ({ userId }) => {
 
   const dispatch = useAppDispatch()
-  const { allUserOrders } = useOrders(dispatch)
+  const { allUserOrders } = useOrders(dispatch, userId)
   const { user } = useAppSelector((state) => state.userSlice)
 
   return allUserOrders.isLoading ? (<LoadingToRedirect />) : (
