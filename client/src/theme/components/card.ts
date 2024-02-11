@@ -19,6 +19,11 @@ const variants = {
       backgroundColor: mode("white", "#242429")(props),
     },
   })),
+  jSolid: definePartsStyle((props) => ({
+    container: {
+      backgroundColor: mode("white", "#3c3c42")(props),
+    },
+  })),
 };
 
 export const cardTheme = defineMultiStyleConfig({ baseStyle, sizes, variants });
