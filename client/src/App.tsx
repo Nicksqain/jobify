@@ -57,9 +57,8 @@ const App: React.FC = () => {
 
 
                 <div className='container'>
-                  <AppLayout>
+                  <AppLayout />
 
-                  </AppLayout>
 
                 </div >
               </Box>
