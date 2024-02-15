@@ -7,7 +7,7 @@ import "./listGroup.scss";
 
 interface ListGroupProps {
   children: ReactElement | ReactNode,
-  setValue: (value: string) => void,
+  setValue: React.Dispatch<React.SetStateAction<string | null>>,
   horizontal: boolean,
   setDefault?: string,
   selectable?: boolean,
@@ -25,6 +25,13 @@ const ListGroup: FC<ListGroupProps> = ({ children, setValue, horizontal, selecta
   const orientationCheck = horizontal ? "list-group-horizontal" : "";
   // FUNCTIONS
 
+  useEffect(() => {
+    if (choosen) {
+      setValue(choosen);
+    }
+    if (choosen === null)
+      setValue(null)
+  }, [choosen, setValue]);
   useEffect(() => {
     let listGroupItems: HTMLElement[] = [];
 
