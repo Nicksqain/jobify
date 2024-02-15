@@ -1,13 +1,12 @@
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../context/authContext';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { saveInLocalStorage } from '../../helpers/auth';
-import Button from '../../components/forms/Button';
-import Input from '../../components/forms/Input';
 import ListGroup from '../../components/ui/ListGroup';
 import './register.scss'
+import { Container, Heading, Stack, FormControl, FormLabel, FormHelperText, Input, Button } from '@chakra-ui/react';
 interface RegisterProps {
 
 }
@@ -48,6 +47,11 @@ const Register: FC<RegisterProps> = ({ }) => {
             }
       }, [auth]);
 
+      const nameChange = (event: ChangeEvent<HTMLInputElement>) => setName(event.target.value)
+      const emailChange = (event: ChangeEvent<HTMLInputElement>) => setEmail(event.target.value)
+      const passwordChange = (event: ChangeEvent<HTMLInputElement>) => setConfirm(event.target.value)
+      const passwordConfirmChange = (event: ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
+
       const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.preventDefault();
             try {
@@ -78,8 +82,7 @@ const Register: FC<RegisterProps> = ({ }) => {
                         if (setAuth)
                               setAuth(data);
                         saveInLocalStorage("auth", data);
-                        toast.success("Succesfully registered");
-                        console.log("Succesfully registered", data);
+                        toast.success("Вы успешно зарегистрировались!");
                         setTimeout(() => {
                               setLoading(false);
                               navigate("/");
@@ -90,52 +93,61 @@ const Register: FC<RegisterProps> = ({ }) => {
             }
       };
       return (
-            <div className="register-container">
 
-                  <div className="form">
-                        <h1 className="fw-bold mb-3 text-center">Register</h1>
+            <Container centerContent maxW='md'>
+                  <Heading>Регистрация</Heading>
+
+                  <Stack spacing={3} mt={10}>
                         <ListGroup setValue={setStatus} horizontal selectable>
                               <div data-selectvalue="freelancer">Я исполнитель</div>
                               <div data-selectvalue="orderer">Я заказчик</div>
                         </ListGroup>
-                        {/* Дебаггинг статуса */}
-                        {/* <button onClick={(el) => console.log(status)}>check</button> */}
-                        <form className="form">
-                              <Input type="text" value={name} label="Name" setValue={setName} />
+                        <FormControl>
+                              <FormLabel>Имя</FormLabel>
                               <Input
-                                    type="email"
-                                    value={email}
-                                    label="Email"
-                                    help="We'll never share your email with anyone else."
-                                    setValue={setEmail}
+                                    onChange={nameChange}
                               />
+                              <FormHelperText>Ваше имя будет видно всем пользователям.</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                              <FormLabel>Email</FormLabel>
                               <Input
-                                    type="password"
-                                    value={password}
-                                    label="Password"
-                                    setValue={setPassword}
+                                    type='email'
+                                    onChange={emailChange}
                               />
-                              <Input
-                                    type="password"
-                                    value={confirm}
-                                    label="Confirm password"
-                                    setValue={setConfirm}
-                              />
-                              <Button
-                                    handleSubmit={handleSubmit}
-                                    name={name}
-                                    email={email}
-                                    password={password}
-                                    loading={loading}
-                              />
-                        </form>
+                              <FormHelperText>Ваш email, используемый как логин.</FormHelperText>
+                        </FormControl>
 
-                        <Toaster />
-                        {/* <pre>{JSON.stringify(email)}</pre>
-          <pre>{JSON.stringify(password)}</pre> */}
-                  </div>
 
-            </div>
+
+                        <FormControl>
+                              <FormLabel>Пароль</FormLabel>
+                              <Input
+                                    type='password'
+                                    onChange={passwordChange}
+                              />
+                              <FormHelperText>Придумайте сложный пароль e.g #dDF42c_qw</FormHelperText>
+                        </FormControl>
+
+                        <FormControl>
+                              <FormLabel>Подтверждение пароля</FormLabel>
+                              <Input
+                                    type='password'
+                                    onChange={passwordConfirmChange}
+                              />
+                              <FormHelperText>Повторите введенный выше пароль</FormHelperText>
+                        </FormControl>
+                        <Button
+                              mt={4}
+                              alignSelf="start"
+                              colorScheme='green'
+                              onClick={handleSubmit}
+                              isLoading={loading}
+                        >Зарегистрироваться</Button>
+                  </Stack>
+
+
+            </Container>
       );
 }
 
