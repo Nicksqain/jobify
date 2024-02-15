@@ -24,6 +24,7 @@ model User {
   Notification   Notification[]
   TaskResponse   TaskResponse[]
   TaskAssignment TaskAssignment[]
+  projects       Project[]
 }
 
 enum Role {
@@ -60,6 +61,18 @@ model Order {
   user           User            @relation(name: "OrderCreator", fields: [userId], references: [id])
   TaskResponse   TaskResponse[]
   taskAssignment TaskAssignment? // Отношение для назначения задачи исполнителю
+  // Проект, в котором задача
+  projectId      Int?
+  project        Project?        @relation(fields: [projectId], references: [id])
+}
+
+model Project {
+  id               Int     @id @default(autoincrement())
+  name             String?
+  shortDescription String?
+  userId           String
+  user             User    @relation(fields: [userId], references: [id])
+  orders           Order[]
 }
 
 model Notification {
