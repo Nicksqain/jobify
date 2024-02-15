@@ -101,6 +101,7 @@ const NavBar: FC<NavBarProps> = ({ }) => {
                   <MyNavBar.Collapse>
                         <MyNavBar.Link to="orders">Задачи</MyNavBar.Link>
                         <MyNavBar.Link to="projects">Проекты</MyNavBar.Link>
+                        <MyNavBar.Link to="responses">Отклики</MyNavBar.Link>
                   </MyNavBar.Collapse>
                   <MyNavBar.Collapse end>
                         <NotificationMenu />
