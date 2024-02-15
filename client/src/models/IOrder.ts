@@ -19,4 +19,5 @@ export interface IOrder {
   plannedCompletionDate: string | null;
   userId: string;
   user: User;
+  projectId: string;
 }
