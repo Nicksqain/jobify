@@ -1,25 +1,28 @@
 import { Stack, Card, VStack, Heading, Text, CardFooter, HStack, Link as ChakraLink } from '@chakra-ui/react';
-import React, { FC } from 'react'
+import { FC } from 'react'
 import ProjectCard from './ProjectCard';
-import ExternalLinkIcon from '../../../assets/icons/ExternalLinkIcon';
 import { Link } from 'react-router-dom';
+import { IOrder } from '../../../models/IOrder';
 
 interface ProjectProps {
-
+      name: string;
+      shortDescription: string;
+      orders: IOrder[];
 }
 
-const Project: FC<ProjectProps> = ({ }) => {
+const Project: FC<ProjectProps> = (props) => {
       return (
             <Stack>
                   <Card p={7}>
                         <Stack>
                               <VStack mb={5} align="start">
-                                    <Heading size="lg">Постройка дома на земле</Heading>
-                                    <Text>Прошу организовать строительство жилого дома на участке земли.</Text>
+                                    <Heading size="lg">{props.name}</Heading>
+                                    <Text>{props.shortDescription}</Text>
                               </VStack>
                               <Stack>
-                                    <ProjectCard isCompleted />
-                                    <ProjectCard />
+                                    {props.orders && props.orders.map(el => (
+                                          <ProjectCard key={el.id} isCompleted={el.status === "completed"} />
+                                    ))}
 
                               </Stack>
                         </Stack>
