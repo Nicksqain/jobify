@@ -1,8 +1,8 @@
-import { Avatar, Box, Card, CardBody, CardHeader, HStack, Text, Heading, Badge, Button, Stack, SimpleGrid, Tab, TabIndicator, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-import React, { FC, useEffect, useState } from 'react'
+import { Avatar, Box, Card, CardBody, HStack, Text, Heading, Badge, Button, Stack, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { FC, useEffect, useState } from 'react'
 import { useAppSelector } from '../../../hooks/redux';
 import dayjs from 'dayjs';
-import { getUserStatus, isFreelancer, isOrderer } from '../../../helpers/role';
+import { getUserStatus, isOrderer } from '../../../helpers/role';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import PublicAllUserOrders from '../../Orders/AllOrders/PublicAllUserOrders';
 import { useQuery } from '@tanstack/react-query';
@@ -11,6 +11,7 @@ import { fetchUserInfo } from '../../../api/userApi';
 import LoadingToRedirect from '../../../components/LoadingToRedirect';
 import PrivateAllUserOrdersTabs from '../../Orders/PrivateAllUserOrdersTabs';
 import PrivateAllUserTasksTabs from '../../Orders/PrivateAllUserTasksTabs';
+import UserProjects from '../../Projects/UserProjects';
 
 interface ProfileProps {
 
@@ -123,7 +124,15 @@ const Profile: FC<ProfileProps> = ({ }) => {
                                                 {userId === user?.id ? <PrivateAllUserOrdersTabs /> :
                                                       <PublicAllUserOrders userId={userId} queryCfg={{ completedBy: userId }} />}
                                           </TabPanel>
-                                          {userId === user?.id && <TabPanel p={0}>Мои проекты</TabPanel>}
+
+                                          <TabPanel p={0}>
+                                                {userId === user?.id &&
+                                                      <>
+
+                                                            <UserProjects />
+                                                      </>
+                                                }
+                                          </TabPanel>
                                           <TabPanel p={0}>Настройки</TabPanel>
                                     </TabPanels>
                               </Tabs>
