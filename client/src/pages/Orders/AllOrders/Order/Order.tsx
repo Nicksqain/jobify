@@ -89,7 +89,7 @@ const Order: FC<OrderProps> = ({ id, title, role, budget, description, author, c
       const response = await updateOrderStatusMutation.mutateAsync({ orderId, status });
 
       if (response) {
-        queryClient.invalidateQueries({ queryKey: ['profileUserOrders'], exact: true })
+        queryClient.invalidateQueries({ queryKey: ['profileUserOrders'], exact: false })
         onClose();
       }
     } catch (error) {
