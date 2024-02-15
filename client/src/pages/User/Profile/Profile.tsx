@@ -57,7 +57,7 @@ const Profile: FC<ProfileProps> = ({ }) => {
                         <Card size="lg" mb={5}>
                               <CardBody>
                                     <HStack alignItems="start" spacing={6} wrap="wrap">
-                                          <Avatar mt={-50} size="2xl" name={userInfoQuery.data?.fullname} src='https://sun9-2.userapi.com/impg/NLw60LaO3eJ_WjCqjynwSvAXH0PyXvl_kXHdcw/VlRqYiewJXk.jpg?size=400x400&quality=95&sign=2396d3c2016207dd20176e71088c237f&type=album' />
+                                          <Avatar mt={-50} size="2xl" name={userInfoQuery.data?.fullname} />
                                           <Box>
                                                 <Text mb={2}>На сервисе с {dayjs(userInfoQuery.data.createdAt).format("DD MMMM YYYY").toString()}</Text>
                                                 <Heading size="2xl" mb={1}>{userInfoQuery.data?.fullname}</Heading>
@@ -68,13 +68,13 @@ const Profile: FC<ProfileProps> = ({ }) => {
                                                                   <Button as={Link} to={"/orders/create"} colorScheme='green' size='md'>
                                                                         Создать заказ
                                                                   </Button>
-                                                                  <Button as={Link} to={"/"} size='md'>
+                                                                  <Button as={Link} to={"/orders"} size='md'>
                                                                         Найти задание
                                                                   </Button>
 
                                                             </> :
                                                             <>
-                                                                  <Button as={Link} to={"/"} colorScheme='green' size='md'>
+                                                                  <Button as={Link} to={"/orders"} colorScheme='green' size='md'>
                                                                         Найти задание
                                                                   </Button>
                                                                   <Button as={Link} to={"/orders/create"} size='md'>
