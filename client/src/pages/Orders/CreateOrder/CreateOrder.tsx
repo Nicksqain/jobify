@@ -86,7 +86,6 @@ const CreateOrder = () => {
     if (!value) {
       error = 'Название задачи обязательно!'
     } else if (value.toLowerCase() !== 'naruto') {
-      error = "Jeez! You're not a fan 😱"
     }
     return error
   }
