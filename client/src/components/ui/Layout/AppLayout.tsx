@@ -16,6 +16,7 @@ import Orders from '../../../pages/Orders/Orders';
 import Profile from '../../../pages/User/Profile/Profile';
 import Projects from '../../../pages/Projects/Projects';
 import CreateProject from '../../../pages/Projects/CreateProject/CreateProject';
+import Responses from '../../../pages/Responses/Responses';
 
 interface AppLayoutProps {
       children?: React.ReactElement
@@ -39,6 +40,9 @@ const AppLayout: FC<AppLayoutProps> = ({ children }) => {
                         <Route path="/projects" element={<PrivateRoute />}>
                               <Route path="" element={<Projects />} />
                               <Route path="create" element={<CreateProject />} />
+                        </Route>
+                        <Route path="/responses" element={<PrivateRoute />}>
+                              <Route path="" element={<Responses />} />
                         </Route>
 
                         {/* ADMINISTRATOR */}
