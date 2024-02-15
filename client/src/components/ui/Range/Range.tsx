@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useState } from 'react'
 import './range.scss'
 import Input from '../../forms/Input';
 
@@ -51,7 +51,7 @@ const Range: FC<RangeProps> = ({ min, max, step, setMinRangeValue, setMaxRangeVa
                         </label>
 
                         {/* <span>{minValue}</span> */}
-                        <Input type='text' setValue={setMinValue} value={minValue}></Input>
+                        <Input type='text' setValue={setMinValue as unknown as Dispatch<SetStateAction<string>>} value={minValue}></Input>
                   </div>
 
                   <div className='j-range dflex flex-1 flex-column gap-10 pd-5'>
@@ -70,7 +70,7 @@ const Range: FC<RangeProps> = ({ min, max, step, setMinRangeValue, setMaxRangeVa
                         </label>
 
 
-                        <Input type='text' setValue={setMaxValue} mask={"number"} value={maxValue}></Input>
+                        <Input type='text' setValue={setMaxValue as unknown as Dispatch<SetStateAction<string>>} mask={"number"} value={maxValue}></Input>
                   </div>
             </div>
       );

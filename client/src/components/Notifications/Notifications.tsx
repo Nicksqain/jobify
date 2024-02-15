@@ -1,7 +1,7 @@
-import React, { Fragment, useEffect } from 'react';
-import { fetchUserNotifications, markAsRead, selectError, selectNotifications, selectNotificationsLoading } from '../../slices/notification.slice';
+import { Fragment, useEffect } from 'react';
+import { fetchUserNotifications, selectError, selectNotifications, selectNotificationsLoading } from '../../slices/notification.slice';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { Box, Center, Divider, Flex, HStack, Heading, List, ListItem, Spacer, Text } from '@chakra-ui/react';
+import { Box, Center, Divider, Flex, Heading, List, Spacer } from '@chakra-ui/react';
 import Notification from './Notification/Notification';
 
 const Notifications = () => {
