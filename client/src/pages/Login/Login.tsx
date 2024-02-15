@@ -1,6 +1,4 @@
-import React, { FC, useContext, useState } from 'react'
-import Button from '../../components/forms/Button';
-import Input from "../../components/forms/Input"
+import React, { ChangeEvent, FC, useContext, useState } from 'react'
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { saveInLocalStorage } from "../../helpers/auth";
@@ -9,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/authContext';
 import { setUser } from '../../slices/user.slice';
 import { useAppDispatch } from '../../hooks/redux';
+import { Button, Container, FormControl, FormHelperText, FormLabel, Heading, Input, Stack } from '@chakra-ui/react';
 interface LoginProps {
 
 }
@@ -29,6 +28,9 @@ const Login: FC<LoginProps> = ({ }) => {
       const navigate = useNavigate();
       const location = useLocation();
       const fromPage = location.state?.from?.pathname || "/";
+
+      const emailChange = (event: ChangeEvent<HTMLInputElement>) => setEmail(event.target.value)
+      const passwordChange = (event: ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
 
       const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
@@ -54,14 +56,13 @@ const Login: FC<LoginProps> = ({ }) => {
                         return;
                   }
                   else {
-                        authContext?.setAuth(data);
-                        dispatch(setUser(data.user))
+
                         // Save in localstorage
                         saveInLocalStorage("auth", data);
+                        authContext?.setAuth(data);
+                        dispatch(setUser(data.user))
                         // toast
-                        toast.success("Successfully logged in");
-                        console.log("Successfully logged in", data);
-                        console.log(fromPage);
+                        toast.success("Вы успешно авторизовались!");
                         setTimeout(() => {
                               setLoading(false);
                               navigate(fromPage);
@@ -78,29 +79,41 @@ const Login: FC<LoginProps> = ({ }) => {
 
       // };
       return (
-            <div className='login-form'>
-                  <form>
-                        <h1>Login</h1>
-                        <Input
-                              type="email"
-                              label="Email"
-                              setValue={setEmail}
-                        />
-                        <Input
-                              type="password"
-                              label="Password"
-                              setValue={setPassword}
-                        />
+            <Container centerContent maxW='md'>
+                  <Heading>Авторизация</Heading>
+
+                  <Stack spacing={3} mt={10}>
+                        <FormControl>
+                              <FormLabel>Email</FormLabel>
+                              <Input
+                                    type='email'
+                                    onChange={emailChange}
+                              />
+                              <FormHelperText>Ваш email, используемый как логин.</FormHelperText>
+                        </FormControl>
+
+
+
+                        <FormControl>
+                              <FormLabel>Пароль</FormLabel>
+                              <Input
+                                    type='password'
+                                    onChange={passwordChange}
+                              />
+                              <FormHelperText>Придумайте сложный пароль e.g #dDF42c_qw</FormHelperText>
+                        </FormControl>
                         <Button
-                              handleSubmit={handleSubmit}
-                              email={email}
-                              password={password}
-                              loading={loading}
-                        />
+                              mt={4}
+                              alignSelf="start"
+                              colorScheme='green'
+                              onClick={handleSubmit}
+                              isLoading={loading}
+                        >Войти</Button>
+                  </Stack>
 
-                  </form>
 
-            </div>
+            </Container>
+
       )
 }
 
