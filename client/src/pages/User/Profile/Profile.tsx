@@ -52,7 +52,7 @@ const Profile: FC<ProfileProps> = ({ }) => {
       return userInfoQuery.isLoading ? (
             <LoadingToRedirect />
       )
-            : userInfoQuery.data && (
+            : (userInfoQuery.data && (
                   <Stack mt={50}>
                         <Card size="lg" mb={5}>
                               <CardBody>
@@ -141,7 +141,7 @@ const Profile: FC<ProfileProps> = ({ }) => {
 
 
                   </Stack>
-            )
+            )) ?? null
 }
 
 export default Profile;
