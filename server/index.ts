@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
 import http from "http";
+import path from "path";
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import authRoutes from "./routes/auth";
 import ordersRoutes from "./routes/orders";
 import projectsRoutes from "./routes/projects";
 import responsesRoutes from "./routes/responses";
+import uploadsRoutes from "./routes/uploads";
 import statsRoutes from "./routes/stats";
 import notificationsRoutes from "./routes/notifications";
 import usersRoutes from "./routes/users";
@@ -50,11 +52,15 @@ app.use(setSecurityHeaders);
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
 
+// // Добавьте эту строку, чтобы Express раздавал статику из папки /uploads
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use("/auth", authRoutes);
 
 app.use("/notifications", notificationsRoutes);
 app.use("/users", usersRoutes);
 app.use("/projects", projectsRoutes);
+app.use("/uploads", uploadsRoutes);
 app.use("/responses", responsesRoutes);
 app.use("/orders", ordersRoutes(io));
 app.use("/stats", statsRoutes);
